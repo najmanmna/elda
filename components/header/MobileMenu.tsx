@@ -50,15 +50,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ color = "black" }) => {
         onClick={toggleSidebar}
         whileHover={{
           scale: 1.15,
-          boxShadow:
-            color === "white"
-              ? "0 0 12px rgba(255,255,255,0.35)"
-              : "0 0 12px rgba(0,0,0,0.2)",
+         
           transition: { type: "spring", stiffness: 300, damping: 15 },
         }}
         whileTap={{ scale: 0.95 }}
         className={`p-2 rounded-full focus:outline-none bg-transparent transition-colors duration-300
-          ${color === "white" ? "text-white hover:text-gray-300" : "text-black hover:text-gray-600"}
+          ${color === "white" ? "text-tech_primary " : "text-tech_primary"}
         `}
       >
         <AlignLeft className="w-8 h-8 sm:w-10 sm:h-10" />

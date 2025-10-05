@@ -8,6 +8,7 @@ import { Product } from "@/sanity.types";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import SearchLogo from "../ui/searchicon";
 
 interface SearchBarProps {
   color?: "black" | "white"; // 👈 control icon/text color
@@ -96,15 +97,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ color = "black" }) => {
             }}
             whileHover={{
               scale: 1.15,
-              boxShadow:
-                color === "white"
-                  ? "0 0 12px rgba(255,255,255,0.35)"
-                  : "0 0 12px rgba(0,0,0,0.2)",
+           
             }}
             transition={{ duration: 0.05, ease: "easeOut" }}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center ${iconColor} ${iconHoverColor}`}
+            className={`absolute right-0 top-1/2 -translate-y-1/2 flex h-15 w-15 items-center justify-center ${iconColor} ${iconHoverColor}`}
           >
-            <Search className="w-8 h-8 focus:outline-none" />
+            <SearchLogo   />
           </motion.button>
         )}
         {showSearch && (

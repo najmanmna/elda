@@ -22,20 +22,20 @@ const Header = () => {
     <header
       className={`fixed top-0 z-50 w-full transition-colors duration-300 ${
         isScrolled
-          ? "bg-black text-white shadow-lg"
+          ? "bg-tech_bg_color text-white shadow-lg"
           : "bg-tech_bg_color text-tech_black"
       }`}
     >
-      <div className="relative flex items-center justify-between py-6 px-2 sm:px-10 sm:mr-2">
+      <div className="relative flex items-center justify-between py-2 px-2 sm:px-10 ">
         {/* Left - Menu */}
-        <div className={`flex items-center ${isScrolled ? "text-white" : "text-black"}`}>
+        <div className={`flex items-center ${isScrolled ? "text-tech_primary" : "text-tech_primary"}`}>
           <MobileMenu color={isScrolled ? "white" : "black"} /> 
           {/* 👆 pass prop if you want to change menu icon color */}
         </div>
 
         {/* Center - Logo */}
         <div className="absolute left-1/2 top-13.5 transform -translate-x-1/2 -translate-y-1/2">
-          {isScrolled ? <LogoWhite /> : <LogoBlack />}
+          {isScrolled ? <LogoBlack /> : <LogoBlack />}
         </div>
 
         {/* Right - Cart + Search */}
