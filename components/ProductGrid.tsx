@@ -7,63 +7,24 @@ import NoProductAvailable from "./NoProductAvailable";
 import { Loader2 } from "lucide-react";
 import Container from "./Container";
 import { ALL_PRODUCTS_QUERYResult } from "@/sanity.types";
-import Title from "./Title";
 import Link from "next/link";
+
+// Import pin & background textures
+import pinImg from "../public/pin.png";
+import boardBg from "../public/texture.png";
 
 const ProductGrid = () => {
   const [products, setProducts] = useState<ALL_PRODUCTS_QUERYResult>([]);
   const [loading, setLoading] = useState(false);
 
-const query = `*[_type == "product" && isFeatured == true] | order(name asc)[0...10]{
-  _id,
-  _type,
-  _createdAt,
-  _updatedAt,
-  _rev,
-  name,
-  slug,
-  images[]{
-    asset->{
-      _ref,
-      url
-    },
-    hotspot,
-    crop,
-    _type,
-    _key
-  },
-  description,
-  price,
-  discount,
-  "categories": categories[]->title,
-  variants[]{
-    _key,
-    colorName,
-    openingStock,
-    stockOut,
-    "availableStock": openingStock - coalesce(stockOut, 0),
-    images[]{
-      asset->{url}
+  const query = `*[_type == "product" && isFeatured == true] | order(name asc)[0...10]{
+    _id, name, slug, images[]{asset->{url}}, description,
+    price, discount,
+    variants[]{_key, openingStock, stockOut,
+      "availableStock": openingStock - coalesce(stockOut, 0),
+      images[]{asset->{url}}
     }
-  },
-  brand->{_ref},
-  status,
-  variant,
-  isFeatured,
-  features[]{
-    label,
-    icon{asset->{_ref}}
-  },
-  specifications[]{
-    value,
-    icon{asset->{_ref}}
-  },
-  realImages[]{asset->{_ref}},
-  realVideos[]{asset->{_ref}}
-}`;
-
-
-  
+  }`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,11 +42,22 @@ const query = `*[_type == "product" && isFeatured == true] | order(name asc)[0..
   }, []);
 
   return (
-    <Container className="flex flex-col mt-10 lg:px-0">
-      <div className="text-center">
-        <Title className="text-3xl font-bold mb-8">
-          Exclusive Bag Collection
-        </Title>
+    <div
+      className="flex flex-col mt-10 lg:px-20 py-12 rounded-xl"
+      style={{
+        backgroundImage: `url(${boardBg.src})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* Heading */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl uppercase sm:text-4xl font-playfair font-semibold text-tech_primary">
+          This Month’s Heritage Edit
+        </h2>
+        <p className="text-tech_gold mt-2 text-lg sm:text-xl">
+          Handpicked For Everyday Elegance.
+        </p>
       </div>
 
       {loading ? (
@@ -97,46 +69,56 @@ const query = `*[_type == "product" && isFeatured == true] | order(name asc)[0..
         </div>
       ) : products?.length ? (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 mt-5">
-            {products.map((product) => (
-              <AnimatePresence key={product?._id}>
-                <motion.div
-                  layout
-                  initial={{ opacity: 0.2 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  {/* ✅ use generated type directly */}
-                  <ProductCard key={product?._id} product={product} />
-                  
-                </motion.div>
-              </AnimatePresence>
-            ))}
+          {/* Grid with pinned style */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-5">
+            {products.map((product, index) => {
+              const rotation = index % 2 === 0 ? "-rotate-2" : "rotate-2";
+              return (
+                <AnimatePresence key={product?._id}>
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className={`relative transition-transform duration-300 ${rotation} hover:rotate-0 hover:scale-105`}
+                  >
+                    {/* Pin Image */}
+                    <img
+                      src={pinImg.src}
+                      alt="pin"
+                      className="absolute -top-5 left-1/2 transform -translate-x-1/2 w-8 h-8 z-20"
+                    />
+                    {/* Card */}
+                    <div className="shadow-[0_8px_20px_rgba(0,0,0,0.25)] rounded-lg overflow-hidden bg-white">
+                      <ProductCard product={product} />
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              );
+            })}
           </div>
 
           {/* Button below the grid */}
-          <div className="flex justify-center mt-8">
+          <div className="flex justify-center mt-10">
             <Link href="/shop">
-           <button
-  className="
-    bg-black text-white px-6 py-3 font-semibold border border-black
-    transition-all duration-300 ease-in-out
-    hover:bg-white hover:text-black
-    hover:shadow-[0_0_12px_2px_rgba(0,0,0,0.3)]
-    hover:scale-105
-  "
->
-  CARRY MORE
-</button>
-
-
+              <button
+                className="
+                  bg-black text-white px-6 py-3 font-semibold border border-black
+                  transition-all duration-300 ease-in-out
+                  hover:bg-white hover:text-black
+                  hover:shadow-[0_0_12px_2px_rgba(0,0,0,0.3)]
+                  hover:scale-105
+                "
+              >
+                CARRY MORE
+              </button>
             </Link>
           </div>
         </>
       ) : (
         <NoProductAvailable />
       )}
-    </Container>
+    </div>
   );
 };
 
