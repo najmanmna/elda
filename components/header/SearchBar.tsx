@@ -97,12 +97,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ color = "black" }) => {
             }}
             whileHover={{
               scale: 1.15,
-           
             }}
             transition={{ duration: 0.05, ease: "easeOut" }}
             className={`absolute right-0 top-1/2 -translate-y-1/2 flex h-15 w-15 items-center justify-center ${iconColor} ${iconHoverColor}`}
           >
-            <SearchLogo   />
+            <SearchLogo />
           </motion.button>
         )}
         {showSearch && (
@@ -158,7 +157,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ color = "black" }) => {
               }}
               className="absolute right-3 top-1/2 -translate-y-1/2"
             >
-              <X className={`w-5 h-5 cursor-pointer ${iconColor} ${iconHoverColor}`} />
+              <X
+                className={`w-5 h-5 cursor-pointer ${iconColor} ${iconHoverColor}`}
+              />
             </button>
           )}
         </form>
@@ -166,7 +167,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ color = "black" }) => {
 
       {/* Results dropdown */}
       {showResults && (
-        <div className="absolute top-full mt-1 left-0 right-0 bg-tech_white rounded-md shadow-lg z-50 max-h-[70vh] overflow-y-auto border border-gray-200">
+        <div className="absolute top-full mt-1 left-0 right-0 bg-tech_bg_color rounded-md shadow-lg z-50 max-h-[70vh] overflow-y-auto border border-gray-200">
           {loading ? (
             <div className="flex items-center justify-center px-6 gap-2 py-4">
               <Loader2 className="w-5 h-5 animate-spin text-tech_orange" />
@@ -210,12 +211,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ color = "black" }) => {
             </div>
           ) : (
             <div className="px-4 py-3">
-              {search ? (
+              {search && (
                 <p className="text-sm font-medium text-gray-700">
-                  No results for "<span className="text-tech_orange">{search}</span>"
+                  No results for "<span className="text-primary">{search}</span>
+                  "
                 </p>
-              ) : (
-                <p className="text-sm font-medium text-gray-700">Popular Products</p>
               )}
             </div>
           )}

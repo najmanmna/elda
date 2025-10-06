@@ -30,23 +30,41 @@ export const metadata: Metadata = {
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
+    
     <html lang="en">
-      <body className={`${poppins.variable} pt-25 antialiased bg-tech_bg_color`}>
-        {children}
-
-        {/* Toaster */}
-        <Toaster
-          position="bottom-right"
-          toastOptions={{
-            style: { background: "#000000", color: "#fff" },
+       
+      <body className={`${poppins.variable} pt-25 antialiased bg-tech_bg_color relative`}>
+       
+        {/* Background layer */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: "url('/bg-pattern.png')",
+            backgroundRepeat: "repeat",
+            backgroundSize: "30%",
+            backgroundAttachment: "fixed",
+            opacity: 0.05, // 5% opacity
           }}
-        />
+        ></div>
 
-        {/* Sanity Live */}
-        <SanityLive />
+        {/* Content layer */}
+        <div className="relative z-10">
+          {children}
 
-        {/* Floating WhatsApp Button */}
-        <WhatsAppButton />
+          {/* Toaster */}
+          <Toaster
+            position="bottom-right"
+            toastOptions={{
+              style: { background: "#000000", color: "#fff" },
+            }}
+          />
+
+          {/* Sanity Live */}
+          <SanityLive />
+
+          {/* Floating WhatsApp Button */}
+          <WhatsAppButton />
+        </div>
       </body>
     </html>
   );
