@@ -8,6 +8,8 @@ import { Loader2 } from "lucide-react";
 import Container from "./Container";
 import { ALL_PRODUCTS_QUERYResult } from "@/sanity.types";
 import Link from "next/link";
+import sectionBreak from "../public/sectionBreak.png";
+
 
 // Import pin & background textures
 import pinImg from "../public/pin.png";
@@ -42,14 +44,31 @@ const ProductGrid = () => {
   }, []);
 
   return (
+    <div className="relative my-15">
+    <div className="absolute -top-6 w-full overflow-hidden">
+          <img
+            src={sectionBreak.src}
+            alt="Section divider flipped"
+            className="w-full h-auto object-cover rotate-180"
+          />
+        </div>
+            <div className="absolute -bottom-4 w-full overflow-hidden">
+          <img
+            src={sectionBreak.src}
+            alt="Section divider flipped"
+            className="w-full h-auto object-cover rotate-180"
+          />
+        </div>
     <div
-      className="flex flex-col mt-10 lg:px-20 py-12 rounded-xl"
+      className="flex flex-col lg:px-20 py-24 rounded-xl"
       style={{
         backgroundImage: `url(${boardBg.src})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
+          
+
       {/* Heading */}
       <div className="text-center mb-12">
         <h2 className="text-3xl uppercase sm:text-4xl font-playfair font-semibold text-tech_primary">
@@ -99,18 +118,18 @@ const ProductGrid = () => {
           </div>
 
           {/* Button below the grid */}
-          <div className="flex justify-center mt-10">
-            <Link href="/shop">
+          <div className="flex justify-center mt-15">
+            <Link href="/">
               <button
                 className="
-                  bg-black text-white px-6 py-3 font-semibold border border-black
+                  bg-tech_primary text-white px-6 py-3 font-semibold border border-tech_gold
                   transition-all duration-300 ease-in-out
                   hover:bg-white hover:text-black
                   hover:shadow-[0_0_12px_2px_rgba(0,0,0,0.3)]
                   hover:scale-105
                 "
               >
-                CARRY MORE
+                VIEW MORE
               </button>
             </Link>
           </div>
@@ -118,6 +137,7 @@ const ProductGrid = () => {
       ) : (
         <NoProductAvailable />
       )}
+    </div>
     </div>
   );
 };

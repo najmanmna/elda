@@ -44,8 +44,8 @@ const CarouselWithZoom = () => {
   }, []);
 
   return (
-    <Container className="w-full pt-15 lg:col-span-3">
-      <div className="relative w-full h-[60vh] sm:h-[80vh] overflow-hidden">
+    <Container className="w-full pt-28 sm:pt-15 lg:col-span-3">
+      <div className="relative w-full h-[40vh] sm:h-[80vh] overflow-hidden">
         {localBanners.map((item, index) => {
           const imageUrl = isMobile ? item.imageMobile : item.imageDesktop;
 

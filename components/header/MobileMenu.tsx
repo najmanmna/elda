@@ -61,11 +61,11 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ color = "black" }) => {
         <AlignLeft className="w-8 h-8 sm:w-10 sm:h-10" />
       </motion.button>
 
-      <Sidebar
+      {/* <Sidebar
         isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
         categories={categories ?? undefined}
-      />
+      /> */}
     </>
   );
 };

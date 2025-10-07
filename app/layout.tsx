@@ -63,7 +63,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           <SanityLive />
 
           {/* Floating WhatsApp Button */}
-          <WhatsAppButton />
+          {/* <WhatsAppButton /> */}
         </div>
       </body>
     </html>

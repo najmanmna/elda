@@ -13,7 +13,7 @@ const Loading = () => {
         >
           <Loader2 className="animate-spin" />
           <span className="font-semibold tracking-wide">
-            Elvyn is loading...
+             Loading...
           </span>
         </motion.div>
       </div>

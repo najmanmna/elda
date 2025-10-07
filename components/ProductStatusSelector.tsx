@@ -2,81 +2,123 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import Container from "./Container";
-import Title from "./Title";
 import Image from "next/image";
 
-import img1 from "../public/new.jpg";
-import img2 from "../public/2.jpg";
-import img3 from "../public/3.jpg";
+// 🖼️ Category images
+import img1 from "../public/img1.png";
+import img2 from "../public/img2.png";
+import img3 from "../public/img3.png";
+import img4 from "../public/img4.png";
 
-const statuses = [
-  {
-    title: "NEW ARRIVALS",
-    value: "new",
-    image: img1,
-  },
-  {
-    title: "HOT SELLING",
-    value: "hot",
-    image: img2,
-  },
-  {
-    title: "BEST DEALS",
-    value: "best",
-    image: img3,
-  },
+// 🪷 Motif border image (tileable PNG)
+import borderTile from "../public/line-motif.png";
+
+const categories = [
+  { title: "FABRICS", value: "fabrics", image: img1 },
+
+  { title: "HOME & BEDDING", value: "home-bedding", image: img3 },
+  { title: "CLOTHING", value: "clothing", image: img2 },
+  { title: "ACCESSORIES", value: "accessories", image: img4 },
 ];
 
 const ProductStatusSelector = () => {
   const router = useRouter();
 
-  const handleClick = (status: string) => {
-    router.push(`/deal/${status}`);
+  const handleClick = (value: string) => {
+    router.push(`/category/${value}`);
   };
 
   return (
-    <Container className="max-w-4xl py-20 mb-10">
-      <div className="text-center mb-10">
-        <Title className="text-3xl font-bold">Explore More</Title>
+    <Container className="py-20 mb-10">
+      {/* Heading */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl uppercase sm:text-4xl font-playfair font-semibold text-tech_primary">
+          Explore Our Collections
+        </h2>
+        <p className="text-tech_gold mt-2 text-lg sm:text-xl">
+          Discover the essence of handmade artistry
+        </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-        {/* Left big card */}
-        <div
-          onClick={() => handleClick(statuses[0].value)}
-          className="md:w-[420px] md:h-[350px] relative cursor-pointer rounded-[50px] overflow-hidden shadow-lg md:col-span-2 group"
-        >
-          <Image
-            src={statuses[0].image}
-            alt={statuses[0].title}
-            className="w-full object-cover h-full transition-transform duration-500 group-hover:scale-105"
-            placeholder="blur"
-          />
-          <div className="absolute inset-0 bg-black/25 flex items-center justify-center">
-            <h2 className="text-gray-100 hover:text-white text-2xl md:text-3xl font-semibold drop-shadow-lg">
-              {statuses[0].title}
-            </h2>
-          </div>
+      {/* ✅ Two columns aligned outward */}
+      <div className="flex justify-center gap-8 flex-wrap">
+        {/* Left group */}
+        <div className="flex flex-col gap-8 justify-items-end">
+          {categories.slice(0, 2).map((cat) => (
+            <div
+              key={cat.value}
+              onClick={() => handleClick(cat.value)}
+              className="relative cursor-pointer group w-[260px] h-[260px] sm:w-[300px] sm:h-[300px]  overflow-hidden"
+            >
+              {/* Motif Border */}
+              <div
+                className="absolute inset-0 p-[10px]"
+                style={{
+                  backgroundImage: `url(${borderTile.src})`,
+                  backgroundRepeat: "repeat",
+                  backgroundSize: "10%",
+                }}
+              />
+
+              {/* Inner Image */}
+              <div className="absolute inset-[10px] overflow-hidden shadow-[0_8px_20px_rgba(0,0,0,0.15)]">
+                <Image
+                  src={cat.image}
+                  alt={cat.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  placeholder="blur"
+                />
+                {/* Overlay Strip */}
+                <div className="absolute bottom-0 left-0 w-full bg-tech_primary/70 group-hover:bg-tech_primary transition-all duration-500 flex items-center justify-between px-6 py-3">
+                  <h3 className="text-white text-xl font-semibold tracking-wide">
+                    {cat.title}
+                  </h3>
+                  <span className="text-white text-2xl font-light group-hover:translate-x-1 transition-transform duration-300">
+                    &gt;
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Right side stacked 2 cards */}
-        <div className="flex flex-col gap-5 ">
-          {statuses.slice(1).map((status) => (
+        {/* Right group */}
+        <div className="flex flex-col gap-8 items-start">
+          {categories.slice(2).map((cat) => (
             <div
-              key={status.value}
-              onClick={() => handleClick(status.value)}
-              className="md:w-[350px] h-[200px] relative cursor-pointer rounded-[50px] overflow-hidden shadow-lg group"
+              key={cat.value}
+              onClick={() => handleClick(cat.value)}
+              className="relative cursor-pointer group w-[260px] h-[260px] sm:w-[300px] sm:h-[300px]  overflow-hidden"
             >
-              <Image
-                src={status.image}
-                alt={status.title}
-                className="w-full  object-center transition-transform duration-500 group-hover:scale-110"
-                placeholder="blur"
+              {/* Motif Border */}
+              <div
+                className="absolute inset-0 p-[10px] "
+                style={{
+                  backgroundImage: `url(${borderTile.src})`,
+                  backgroundRepeat: "repeat",
+                  backgroundSize: "10%",
+                }}
               />
-              <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                <h3 className="text-gray-300 hover:text-white text-xl md:text-2xl font-semibold drop-shadow-lg">
-                  {status.title}
-                </h3>
+
+              {/* Inner Image */}
+              <div className="absolute inset-[10px]  overflow-hidden shadow-[0_8px_20px_rgba(0,0,0,0.15)]">
+                <Image
+                  src={cat.image}
+                  alt={cat.title}
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  placeholder="blur"
+                />
+                {/* Overlay Strip */}
+                <div className="absolute bottom-0 left-0 w-full bg-tech_primary/70 group-hover:bg-tech_primary transition-all duration-500 flex items-center justify-between px-6 py-3">
+                  <h3 className="text-white  text-xl font-semibold tracking-wide">
+                    {cat.title}
+                  </h3>
+                  <span className="text-white text-2xl font-light group-hover:translate-x-1 transition-transform duration-300">
+                    &gt;
+                  </span>
+                </div>
               </div>
             </div>
           ))}

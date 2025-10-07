@@ -49,7 +49,8 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
       <div className=" p-6 flex flex-col h-full ">
         {/* Product Image */}
         <div className="relative w-full border-2 border-tech_gold overflow-hidden ">
-          <Link href={`/product/${product?.slug?.current || ""}`}>
+          {/* <Link href={`/product/${product?.slug?.current || ""}`}> */}
+          <Link href={`/`}>
             {primaryImage && (
               <img
                 src={
@@ -85,7 +86,8 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
           {/* Shop Now Button */}
           {totalStock > 0 && (
             <Link
-              href={`/product/${product?.slug?.current || ""}`}
+              // href={`/product/${product?.slug?.current || ""}`}
+                   href={`/`}
               className="mt-3 inline-block px-6 py-2 bg-tech_primary text-white text-sm font-semibold shadow hover:bg-tech_dark transition-colors"
             >
               SHOP NOW
