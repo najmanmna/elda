@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   },
   description: "ELDA | HOUSE OF BLOCK PRINTS",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/favicon.jpg",
+    shortcut: "/favicon.jpg",
+    apple: "/favicon.jpg",
   },
 };
 

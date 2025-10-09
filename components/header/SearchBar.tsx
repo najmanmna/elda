@@ -178,7 +178,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ color = "black" }) => {
               {products.map((product) => (
                 <Link
                   key={product?._id}
-                  href={`/product/${product?.slug?.current}`}
+                  href={"/"}
+                  // href={`/product/${product?.slug?.current}`}
                   onClick={() => {
                     setShowResults(false);
                     setSearch("");

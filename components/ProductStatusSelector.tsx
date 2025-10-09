@@ -25,7 +25,8 @@ const ProductStatusSelector = () => {
   const router = useRouter();
 
   const handleClick = (value: string) => {
-    router.push(`/category/${value}`);
+    // router.push(`/category/${value}`);
+    router.push(`/`);
   };
 
   return (
