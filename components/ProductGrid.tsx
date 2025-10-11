@@ -70,7 +70,7 @@ const ProductGrid = () => {
           
 
       {/* Heading */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-12 mx-10">
         <h2 className="text-3xl uppercase sm:text-4xl font-playfair font-semibold text-tech_primary">
           This Month’s Heritage Edit
         </h2>
@@ -81,7 +81,7 @@ const ProductGrid = () => {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-10 min-h-80 space-y-4 text-center bg-gray-100 rounded-lg w-full mt-10">
-          <motion.div className="flex items-center space-x-2 text-black">
+          <motion.div className="flex items-center space-x-2 text-tech_primary">
             <Loader2 className="w-5 h-5 animate-spin" />
             <span>Product is loading...</span>
           </motion.div>
@@ -89,7 +89,7 @@ const ProductGrid = () => {
       ) : products?.length ? (
         <>
           {/* Grid with pinned style */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-5">
+          <div className="grid grid-cols-1 px-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mt-5">
             {products.map((product, index) => {
               const rotation = index % 2 === 0 ? "-rotate-2" : "rotate-2";
               return (

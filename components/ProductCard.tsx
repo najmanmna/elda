@@ -46,7 +46,7 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
         backgroundSize: "cover",
       }}
     >
-      <div className=" p-4 flex flex-col h-96 ">
+      <div className=" p-4 flex flex-col h-96 sm:h-96 ">
         {/* Product Image */}
         <div className="relative w-full border-2 border-tech_gold overflow-hidden ">
           {/* <Link href={`/product/${product?.slug?.current || ""}`}> */}
@@ -55,12 +55,12 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
               <img
                 src={
                   hovered && secondaryImage
-                    ? image(secondaryImage).width(700).height(600).url()
-                    : image(primaryImage).width(700).height(600).url()
+                    ? image(secondaryImage).width(620).height(750).url()
+                    : image(primaryImage).width(620).height(750).url()
                 }
                 alt={product?.name || "productImage"}
                 loading="lazy"
-                className={`w-full h-auto max-h-60 object-contain bg-tech_white transition-all duration-500
+                className={`w-full h-auto max-h-80 object-contain bg-tech_white transition-all duration-500
                   ${totalStock > 0 ? "group-hover:scale-105" : "opacity-50"}`}
               />
             )}
@@ -69,14 +69,14 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
 
         {/* Product Details */}
         <div className="p-4 flex flex-col items-center gap-2 flex-1">
-          <Title className="text-2xl font-cormorant line-clamp-2 text-center">
+          <Title className="text-xl sm:text-xl font-cormorant line-clamp-2 text-center">
             {product?.name}
           </Title>
 
           <PriceView
             price={product?.price}
             discount={product?.discount}
-            className="text-lg"
+            className="text-sm sm:text-lg"
           />
 
           {totalStock === 0 && (
@@ -88,7 +88,7 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
             <Link
               // href={`/product/${product?.slug?.current || ""}`}
                    href={`/`}
-              className="mt-3 inline-block px-6 py-2 bg-tech_primary text-white text-sm font-semibold shadow hover:bg-tech_dark transition-colors"
+              className="mt-2 inline-block px-3 py-2 sm:px-6 sm:py-2 bg-tech_primary text-white text-sm font-semibold shadow hover:bg-tech_dark transition-colors"
             >
               SHOP NOW
             </Link>
