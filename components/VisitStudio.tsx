@@ -28,7 +28,7 @@ const VisitStudio = () => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-white/85"></div>
 
-      <Container className="relative z-10">
+      <Container className="relative z-10 mx-auto max-w-5xl">
         {/* Heading */}
         <div className="text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-playfair font-semibold text-tech_primary">
@@ -39,11 +39,11 @@ const VisitStudio = () => {
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16">
           {/* Left: looping reel video with border */}
           <div
-            className="lg:w-1/3 w-full max-w-sm p-[10px] relative"
+            className=" p-[10px] relative"
             style={{
               backgroundImage: `url(${borderTile.src})`,
               backgroundRepeat: "repeat",
-              backgroundSize: "auto",
+              backgroundSize: "10%",
             }}
           >
             <div className="relative">

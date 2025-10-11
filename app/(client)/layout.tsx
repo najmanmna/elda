@@ -13,7 +13,7 @@ export default async function RootLayout({
       <Header />
       <LinkBadge />
       {children}
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

@@ -43,20 +43,20 @@ const HeritageStory = () => {
           className="w-full h-auto object-cover rotate-180"
         />
       </div>
-      <div className="absolute -bottom-4 w-full overflow-hidden">
+      <div className="absolute -bottom-4 w-full overflow-hidden z-20">
         <img
           src={sectionBreak.src}
           alt="Section divider flipped"
           className="w-full h-auto object-cover rotate-180"
         />
       </div>{" "}
-      <Container className="py-20 ">
+      <Container className="py-32 ">
         {/* Heading */}
         <div className="text-center mb-16 ">
           <h2 className="text-3xl sm:text-4xl font-playfair font-semibold text-tech_primary">
             THE HERITAGE WE BRING
           </h2>
-          <p className="text-tech_gold mt-2 text-lg sm:text-xl max-w-2xl mx-auto">
+          <p className="text-tech_gold mt-2 text-lg sm:text-xl max-w-xl mx-auto">
             A celebration of timeless artistry, carefully curated for your home
             in Sri Lanka.
           </p>
@@ -83,21 +83,24 @@ const HeritageStory = () => {
 
               {/* Image with motif border */}
               <div
-                className="lg:w-1/2 w-full h-60 sm:h-72 lg:h-64 p-[10px] relative"
+                className=" p-[10px] relative"
                 style={{
                   backgroundImage: `url(${borderTile.src})`,
                   backgroundRepeat: "repeat",
-                  backgroundSize: "cover",
+                   backgroundSize: "10%",
                   
                 }}
               >
+                
                 <Image
                   src={point.image}
                   alt={point.title}
-                  fill
-                  className="object-cover w-full h-full relative z-10"
+                   width={600}
+            height={400}
+                  className="w-full aspect-[2/1] object-cover "
                   placeholder="blur"
                 />
+            
               </div>
             </div>
           ))}

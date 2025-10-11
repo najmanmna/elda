@@ -20,7 +20,7 @@ const Header = () => {
     <header className="fixed top-0 left-0 z-50 w-full">
       {/* --- Announcement Bar --- */}
       <div
-        className={`bg-tech_primary text-white text-xs sm:text-sm px-4 sm:px-6 flex flex-wrap items-center justify-center gap-4 sm:gap-10 transition-all duration-300`}
+        className={`hidden bg-tech_primary text-white text-xs sm:text-sm px-4 sm:px-6 sm:flex flex-wrap items-center justify-center gap-4 sm:gap-10 transition-all duration-300`}
         style={{
           height: isScrolled ? 0 : announcementHeight,
           overflow: "hidden",

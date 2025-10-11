@@ -46,7 +46,7 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
         backgroundSize: "cover",
       }}
     >
-      <div className=" p-6 flex flex-col h-full ">
+      <div className=" p-4 flex flex-col h-96 ">
         {/* Product Image */}
         <div className="relative w-full border-2 border-tech_gold overflow-hidden ">
           {/* <Link href={`/product/${product?.slug?.current || ""}`}> */}
@@ -55,12 +55,12 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
               <img
                 src={
                   hovered && secondaryImage
-                    ? image(secondaryImage).width(800).height(900).url()
-                    : image(primaryImage).width(800).height(900).url()
+                    ? image(secondaryImage).width(700).height(600).url()
+                    : image(primaryImage).width(700).height(600).url()
                 }
                 alt={product?.name || "productImage"}
                 loading="lazy"
-                className={`w-full h-auto max-h-80 object-contain bg-tech_white transition-all duration-500
+                className={`w-full h-auto max-h-60 object-contain bg-tech_white transition-all duration-500
                   ${totalStock > 0 ? "group-hover:scale-105" : "opacity-50"}`}
               />
             )}

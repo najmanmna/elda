@@ -124,8 +124,8 @@ const ProductGrid = () => {
                 className="
                   bg-tech_primary text-white px-6 py-3 font-semibold border border-tech_gold
                   transition-all duration-300 ease-in-out
-                  hover:bg-white hover:text-black
-                  hover:shadow-[0_0_12px_2px_rgba(0,0,0,0.3)]
+                  hover:bg-tech_gold hover:text-primary
+                  
                   hover:scale-105
                 "
               >
