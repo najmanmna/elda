@@ -5,9 +5,9 @@ import Image from "next/image";
 import sectionBreak from "../public/sectionBreak.png";
 
 // Images you uploaded
-import img1 from "../public/img1.png";
-import img2 from "../public/img2.png";
-import img3 from "../public/img3.png";
+import img1 from "../public/heri1.png";
+import img2 from "../public/heri2.png";
+import img3 from "../public/heri3.png";
 
 // Tileable motif border
 import borderTile from "../public/line-motif.png";
@@ -35,7 +35,7 @@ const heritagePoints = [
 
 const HeritageStory = () => {
   return (
-    <div className="relative">
+    <div className="relative ">
       <div className="absolute -top-6  w-full overflow-hidden">
         <img
           src={sectionBreak.src}
@@ -50,7 +50,7 @@ const HeritageStory = () => {
           className="w-full h-auto object-cover rotate-180"
         />
       </div>{" "}
-      <div className="py-20 px-10">
+      <Container className="py-20 ">
         {/* Heading */}
         <div className="text-center mb-16 ">
           <h2 className="text-3xl sm:text-4xl font-playfair font-semibold text-tech_primary">
@@ -102,7 +102,7 @@ const HeritageStory = () => {
             </div>
           ))}
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import MissionSection from "@/components/MissionSection";
 import WhatIs from "@/components/WhatIs";
 import sectionBreak from "../../public/sectionBreak.png";
 import HeritageStory from "@/components/HeritageStory";
+import VisitStudio from "@/components/VisitStudio";
 
 export default async function Home() {
   return (
@@ -39,6 +40,7 @@ export default async function Home() {
         <ProductStatusSelector />
         {/* <MissionSection /> */}
         <HeritageStory />
+        <VisitStudio />
 
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20">
           {/* <FooterTop /> */}
