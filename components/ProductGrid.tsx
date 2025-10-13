@@ -75,7 +75,7 @@ const ProductGrid = () => {
           This Month’s Heritage Edit
         </h2>
         <p className="text-tech_gold mt-2 text-lg sm:text-xl">
-          Handpicked For Everyday Elegance.
+          Handpicked For Everyday Charm.
         </p>
       </div>
 

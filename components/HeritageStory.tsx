@@ -57,7 +57,7 @@ const HeritageStory = () => {
             THE HERITAGE WE BRING
           </h2>
           <p className="text-tech_gold mt-2 text-lg sm:text-xl max-w-xl mx-auto">
-            A celebration of timeless artistry, carefully curated for your home
+            A celebration of authentic handblock printing, carefully curated for your home
             in Sri Lanka.
           </p>
         </div>

@@ -5,10 +5,10 @@ import Container from "./Container";
 import Image from "next/image";
 
 // 🖼️ Category images
-import img1 from "../public/img1.png";
-import img2 from "../public/img2.png";
-import img3 from "../public/img3.png";
-import img4 from "../public/img4.png";
+import img1 from "../public/img1.jpeg";
+import img2 from "../public/img2.jpeg";
+import img3 from "../public/img3.jpeg";
+import img4 from "../public/img4.jpeg";
 
 // 🪷 Motif border image (tileable PNG)
 import borderTile from "../public/line-motif.png";
@@ -34,10 +34,10 @@ const ProductStatusSelector = () => {
       {/* Heading */}
       <div className="text-center mb-12">
         <h2 className="text-3xl uppercase sm:text-4xl font-playfair font-semibold text-tech_primary">
-          Explore Our Collections
+          Explore Our Collection
         </h2>
         <p className="text-tech_gold mt-2 text-lg sm:text-xl">
-          Discover the essence of handmade artistry
+          Discover centuries old craft for the modern life.
         </p>
       </div>
 

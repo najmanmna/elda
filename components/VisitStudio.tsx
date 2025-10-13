@@ -85,7 +85,10 @@ const VisitStudio = () => {
               <p className="text-gray-700 text-base sm:text-lg">
                 Orchard Building (3rd Floor),
                 <br />
-                77 3/2B Galle Road, Colombo 06.
+                77 3/2B Galle Road, Opposite Savoy Cinema, Colombo 06.
+              </p>
+              <p className="text-gray-700 text-base sm:text-lg mt-2">
+                📞 011 255 3633 | 077 721 2229
               </p>
             </div>
 
