@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
     // Send notification email to admin
     try {
       await sendSubscribeEmail({
-        to: "info@elvynstore.com",
+        to: "hello@ahamedwebstudio.com",
         subject: "New Subscriber Alert",
         html: adminEmailTemplate(email),
       });

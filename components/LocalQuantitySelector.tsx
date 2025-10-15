@@ -26,7 +26,7 @@ export default function LocalQuantitySelector({ stockAvailable = 10, onChange }:
   };
 
   return (
-    <div className="flex items-center justify-between border rounded-lg px-3 py-2 w-fit bg-white">
+    <div className="flex items-center justify-between border rounded-lg px-3 py-2 w-fit bg-white border-gray-300">
       <button
         onClick={decrease}
         className="text-lg font-bold text-gray-700 hover:text-tech_primary"

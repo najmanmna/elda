@@ -52,12 +52,31 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           {children}
 
           {/* Toaster */}
-          <Toaster
-            position="bottom-right"
-            toastOptions={{
-              style: { background: "#000000", color: "#fff" },
-            }}
-          />
+         <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            borderRadius: "12px",
+            background: "#333",
+            color: "#fff",
+            padding: "16px",
+            fontWeight: "500",
+          },
+          success: {
+            iconTheme: {
+              primary: "#22c55e",
+              secondary: "#fff",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "#fff",
+            },
+          },
+        }}
+      />
 
           {/* Sanity Live */}
           <SanityLive />

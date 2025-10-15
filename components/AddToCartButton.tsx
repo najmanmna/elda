@@ -61,7 +61,7 @@ export default function AddToCartButton({
   };
 
   const buttonStyle = cn(
-    "w-full py-2 px-4 rounded-lg flex items-center justify-center font-semibold transition-colors",
+    "w-1/2 py-2 px-4 rounded-lg flex items-center justify-center font-semibold transition-colors",
     displayMode === "overlay"
       ? "bg-tech_primary text-white hover:bg-white/90"
       : "bg-tech_primary text-white hover:bg-tech_orange/90",
@@ -71,6 +71,7 @@ export default function AddToCartButton({
 
   return (
     <button
+
       className={buttonStyle}
       onClick={handleAddToCart}
       disabled={isOutOfStock}

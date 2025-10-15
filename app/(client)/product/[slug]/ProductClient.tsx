@@ -177,29 +177,28 @@ export default function ProductClient({ product }: { product: any }) {
             )}
 
             {/* Quantity Selector Label & Stock Info */}
-          {/* Quantity Selector with Label and Available Stock */}
-<div className="flex flex-col gap-1 mt-4">
-  {/* Label */}
-  <p className="text-sm font-semibold">
-    {product.category?.name?.toLowerCase() === "fabrics"
-      ? "Select quantity (in meters)"
-      : "Select quantity"}
-  </p>
+            {/* Quantity Selector with Label and Available Stock */}
+            <div className="flex flex-col gap-1 mt-4">
+              {/* Label */}
+              <p className="text-sm font-semibold">
+                {product.category?.name?.toLowerCase() === "fabrics"
+                  ? "Select quantity (in meters)"
+                  : "Select quantity"}
+              </p>
 
-  {/* Quantity selector and stock info */}
-  <div className="flex items-center gap-3">
-    <LocalQuantitySelector
-      stockAvailable={selectedVariant?.availableStock}
-      onChange={(q) => setQuantity(q)}
-    />
-    <p className="text-sm text-gray-500">
-      {product.category?.name?.toLowerCase() === "fabrics"
-        ? `Available: ${availableStock}m`
-        : `Available: ${availableStock}`}
-    </p>
-  </div>
-</div>
-
+              {/* Quantity selector and stock info */}
+              <div className="flex items-center gap-3">
+                <LocalQuantitySelector
+                  stockAvailable={selectedVariant?.availableStock}
+                  onChange={(q) => setQuantity(q)}
+                />
+                <p className="text-sm text-gray-500">
+                  {product.category?.name?.toLowerCase() === "fabrics"
+                    ? `Available: ${availableStock}.0 m`
+                    : `Available: ${availableStock}`}
+                </p>
+              </div>
+            </div>
 
             {/* Quantity Selector */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-4">

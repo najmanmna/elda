@@ -365,7 +365,7 @@ try {
 
   // Admin email
   sendSubscribeEmail({
-    to: "info@elvynstore.com",
+    to: "mnanajman@gmail.com",
     subject: `New Order ${orderId} Placed`,
    html: adminOrderTemplate(
   orderId,
