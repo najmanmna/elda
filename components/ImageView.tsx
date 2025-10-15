@@ -10,16 +10,11 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
-// ✅ new import for magnification
 import InnerImageZoom from "react-inner-image-zoom";
 import "react-inner-image-zoom/lib/styles.min.css";
 
 interface Props {
-  images?: Array<{
-    _key: string;
-    asset?: { _ref: string };
-  }>;
+  images?: Array<{ _key: string; asset?: { _ref: string } }>;
   isStock?: number;
 }
 
@@ -53,27 +48,8 @@ export default function ImageView({ images = [], isStock }: Props) {
 
   return (
     <>
-      <div className="w-full md:w-2/5 flex flex-col md:flex-row gap-4">
-        {/* Thumbnails */}
-        <div className="flex md:flex-col gap-2 md:gap-3 items-center md:items-start">
-          {images.map((img, idx) => (
-            <button
-              key={`${img._key}-${idx}`} // ✅ unique key
-              onClick={() => setActive(img)}
-              className={`border rounded-md overflow-hidden w-16 h-16 md:w-20 md:h-20 ${
-                active?._key === img._key ? "ring-2 ring-tech_dark_color" : ""
-              }`}
-            >
-              <img
-                src={urlFor(img).url()}
-                alt={`thumb-${idx}`}
-                className="w-full h-full object-contain"
-              />
-            </button>
-          ))}
-        </div>
-
-        {/* Magnified main image */}
+      <div className="w-full md:w-2/5 flex flex-col gap-4">
+        {/* Main image */}
         <AnimatePresence mode="wait">
           <motion.div
             key={active?._key}
@@ -81,7 +57,7 @@ export default function ImageView({ images = [], isStock }: Props) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="flex-1 border rounded-md overflow-hidden cursor-zoom-in"
+            className="border rounded-md overflow-hidden cursor-zoom-in"
             onClick={() =>
               openModal(images.findIndex((i) => i._key === active?._key))
             }
@@ -89,19 +65,38 @@ export default function ImageView({ images = [], isStock }: Props) {
             {active && (
               <InnerImageZoom
                 src={urlFor(active).url()}
-                zoomSrc={urlFor(active).url()} // high-res for magnification
-                // zoomType="hover" // or "click"
-                zoomScale={isMobile ? 1.2 : 1.2}
+                zoomSrc={urlFor(active).url()}
+                zoomScale={isMobile ? 1.1 : 1.1}
                 zoomType={isMobile ? "click" : "hover"}
                 zoomPreload
-                // alt="product image"
-                className={`object-contain w-full max-h-full ${
+                className={`object-contain w-full max-h-[500px] ${
                   isStock === 0 ? "opacity-50" : ""
                 }`}
               />
             )}
           </motion.div>
         </AnimatePresence>
+
+        {/* Thumbnails below */}
+        {images.length > 1 && (
+          <div className="flex justify-center gap-2 mt-3 flex-wrap">
+            {images.map((img, idx) => (
+              <button
+                key={`${img._key}-${idx}`}
+                onClick={() => setActive(img)}
+                className={`border rounded-md overflow-hidden w-16 h-16 md:w-20 md:h-20 transition-transform transform hover:scale-105 ${
+                  active?._key === img._key ? "ring-2 ring-tech_dark_color" : ""
+                }`}
+              >
+                <img
+                  src={urlFor(img).url()}
+                  alt={`thumb-${idx}`}
+                  className="w-full h-full object-contain"
+                />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Modal carousel with zoom */}
@@ -118,7 +113,7 @@ export default function ImageView({ images = [], isStock }: Props) {
               initial={{ scale: 0.95 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.95 }}
-              className="bg-white  max-w-2xl w-full p-4 relative max-h-xl"
+              className="bg-white max-w-3xl w-full p-4 relative max-h-[90vh] overflow-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <button
@@ -132,12 +127,10 @@ export default function ImageView({ images = [], isStock }: Props) {
                 <CarouselContent>
                   {images.map((img, idx) => (
                     <CarouselItem key={`${img._key}-modal-${idx}`}>
-                      {" "}
-                      <div className="flex items-center justify-center ">
+                      <div className="flex items-center justify-center">
                         <InnerImageZoom
                           src={urlFor(img).url()}
                           zoomSrc={urlFor(img).url()}
-                          // zoomType="hover"
                           zoomScale={isMobile ? 1.1 : 1.1}
                           zoomType={isMobile ? "click" : "hover"}
                           zoomPreload

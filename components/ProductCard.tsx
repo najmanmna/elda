@@ -109,7 +109,7 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
             {!hovered && totalStock > 0 && (
               <PriceView
                 price={product?.price}
-                discount={product?.discount}
+            
                 className="text-sm sm:text-lg"
                 unitLabel={
                   product?.category?.name?.toLowerCase() === "fabrics"

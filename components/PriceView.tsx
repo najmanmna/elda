@@ -6,7 +6,7 @@ interface Props {
   price?: number | null;
   discount?: number | null;
   className?: string;
-  unitLabel?: string; // ✅ new prop
+  unitLabel?: string;
 }
 
 const PriceView = ({ price, discount, className, unitLabel }: Props) => {
@@ -16,30 +16,28 @@ const PriceView = ({ price, discount, className, unitLabel }: Props) => {
   const finalPrice = hasDiscount ? price - (discount * price) / 100 : price;
 
   return (
-    <div className="flex flex-col items-center gap-0">
-      {/* Original price on top if discounted */}
-      {/* {hasDiscount && (
+    <div className="inline-flex items-baseline gap-2 text-sm">
+      {/* Original price if discounted */}
+      {hasDiscount && (
         <PriceFormatter
           amount={price}
           className={twMerge(
-            "line-through text-xs text-tech_dark/70",
+            "line-through text-gray-500",
             className
           )}
         />
-      )} */}
+      )}
 
-      {/* Final price with optional unit label */}
-      <div className="flex items-baseline gap-1">
-        <PriceFormatter
-          amount={finalPrice}
-          className={cn("text-tech_orange font-semibold", className)}
-        />
-        {unitLabel && (
-          <span className="text-xs sm:text-sm text-tech_dark/70">
-            {unitLabel}
-          </span>
-        )}
-      </div>
+      {/* Final price */}
+      <PriceFormatter
+        amount={finalPrice}
+        className={twMerge("text-tech_orange font-semibold", className)}
+      />
+
+      {/* Optional unit label */}
+      {unitLabel && (
+        <span className="text-xs text-gray-600">{unitLabel}</span>
+      )}
     </div>
   );
 };

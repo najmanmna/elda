@@ -22,6 +22,7 @@ const QuantityButtons = ({
   className,
   borderStyle,
   displayMode = "default",
+  availableStock, // ✅ destructure this
 }: Props) => {
   // ✅ Always get the latest cart item from store
   const cartItem = useCartStore((s) =>
@@ -31,14 +32,18 @@ const QuantityButtons = ({
   // quantity in cart
   const itemCount = cartItem?.quantity ?? 0;
 
-  // Use Infinity as fallback until stock refresh completes
-  const availableStock = cartItem?.variant?.availableStock ?? Infinity;
+  // ✅ use fallback from props if cart item doesn't exist yet
+  const finalStock =
+    cartItem?.variant?.availableStock ??
+    availableStock ??
+    0;
 
   const addItem = useCartStore((s) => s.addItem);
   const increaseQuantity = useCartStore((s) => s.increaseQuantity);
   const decreaseQuantity = useCartStore((s) => s.decreaseQuantity);
 
-  const canIncrease = itemCount < availableStock;
+  const canIncrease = itemCount < finalStock;
+
 
   const handleAdd = () => {
     if (!cartItem) return; // safety
