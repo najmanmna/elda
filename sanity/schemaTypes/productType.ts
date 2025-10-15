@@ -1,7 +1,6 @@
 import { TrolleyIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
-
 export const productType = defineType({
   name: "product",
   title: "Products",
@@ -12,6 +11,7 @@ export const productType = defineType({
       name: "name",
       title: "Product Name",
       type: "string",
+      description: "E.g., 'Cotton Indigo Block Print' or 'Jaipur Kantha Quilt'",
       validation: (Rule) => Rule.required(),
     }),
 
@@ -26,42 +26,81 @@ export const productType = defineType({
       validation: (Rule) => Rule.required(),
     }),
 
-    // 🔹 Variants: each color has stock + images
+    // ✨ UPDATED: This dropdown will ONLY show main categories.
+    defineField({
+      name: "category",
+      title: "Main Category",
+      type: "reference",
+      to: [{ type: "category" }],
+      // This filter ensures only documents that DO NOT have a parent are shown.
+      options: {
+        filter: "!defined(parent)",
+      },
+      validation: (Rule) => Rule.required(),
+    }),
+
+    // ✨ UPDATED: This dropdown will be filtered based on the main category selection.
+    defineField({
+      name: "subcategory",
+      title: "Subcategory",
+      type: "reference",
+      to: [{ type: "category" }],
+      options: {
+        filter: ({ document }) => {
+          // Get the selected category's ID safely using optional chaining
+           const categoryId = (document?.category as { _ref: string })?._ref;
+
+          // If no category is selected, return an empty list
+          if (!categoryId) {
+            return { filter: "false" };
+          }
+
+          // Return the filter to find subcategories of the selected main category
+          return {
+            filter: `parent._ref == $categoryId`,
+            params: { categoryId },
+          };
+        },
+      },
+      // ✅ Use optional chaining here as well for safety
+      readOnly: ({ document }) => !document?.category,
+    }),
+
+    // 🔹 Variants: Each pattern/style has its own stock and images.
     defineField({
       name: "variants",
       title: "Product Variants",
       type: "array",
+      description:
+        "Add at least one variant. For products without different patterns, the variant name can be the same as the product name.",
       of: [
         {
           type: "object",
           name: "variant",
           fields: [
             defineField({
-              name: "colorName",
-              title: "Color Name",
+              name: "variantName",
+              title: "Variant Name / Pattern",
               type: "string",
+              description: "E.g., 'Maroon Leaf Pattern' or 'Blue Floral Motif'",
               validation: (Rule) => Rule.required(),
             }),
-           defineField({
-  name: "openingStock",
-  title: "Opening Stock",
-  type: "number",
-  validation: (Rule) => Rule.required().min(0),
-}),
-defineField({
-  name: "stockOut",
-  title: "Stock Out",
-  type: "number",
-  // readOnly: true, // automatically managed by checkout logic
-  initialValue: 0,
-  validation: (Rule) =>
-                Rule.min(0).warning("Stock Out cannot be negative"),
-}),
-
-
+            defineField({
+              name: "openingStock",
+              title: "Opening Stock",
+              type: "number",
+              validation: (Rule) => Rule.required().min(0),
+            }),
+            defineField({
+              name: "stockOut",
+              title: "Stock Out",
+              type: "number",
+              initialValue: 0,
+              readOnly: true, // Should be managed by your order logic, not manually.
+            }),
             defineField({
               name: "images",
-              title: "Images for this color",
+              title: "Images for this Variant",
               type: "array",
               of: [{ type: "image", options: { hotspot: true } }],
               validation: (Rule) => Rule.required().min(1),
@@ -69,16 +108,16 @@ defineField({
           ],
           preview: {
             select: {
-              title: "colorName",
+              title: "variantName",
               opening: "openingStock",
-    out: "stockOut",
+              out: "stockOut",
               media: "images.0.asset",
             },
             prepare({ title, opening, out, media }) {
               const available = (opening || 0) - (out || 0);
               return {
                 title,
-               subtitle: `Opening: ${opening || 0} | Out: ${out || 0} | Available: ${available}`,
+                subtitle: `Available: ${available}`,
                 media,
               };
             },
@@ -88,155 +127,70 @@ defineField({
       validation: (Rule) => Rule.required().min(1),
     }),
 
-    
-
     defineField({
       name: "price",
-      title: "Price",
+      title: "Price (LKR)",
       type: "number",
       validation: (Rule) => Rule.required().min(0),
     }),
 
     defineField({
       name: "discount",
-      title: "Discount",
+      title: "Discount Price (LKR)",
       type: "number",
+      description: "Optional: If set, this will be the new price.",
       validation: (Rule) => Rule.min(0),
     }),
 
     defineField({
-      name: "categories",
-      title: "Categories",
-      type: "array",
-      of: [{ type: "reference", to: { type: "category" } }],
+      name: "material",
+      title: "Material",
+      type: "string",
+      description: "E.g., '100% Cotton', 'Silk Blend'",
     }),
 
     defineField({
-      name: "status",
-      title: "Product Status",
-      type: "string",
-      options: {
-        list: [
-          { title: "New Arrival", value: "new" },
-          { title: "Hot Selling", value: "hot" },
-          { title: "Best Deal", value: "best" },
-        ],
-      },
+      name: "width",
+      title: "Width (inches)",
+      type: "number",
+      description: "Only applicable for fabrics sold by the meter.",
+    }),
+
+    defineField({
+      name: "useCases",
+      title: "Suggested Use Cases",
+      type: "text",
+      description: "E.g., 'Great for Sarees, Tunics, Kurtas, Dresses, and Tops...'",
     }),
 
     defineField({
       name: "isFeatured",
       title: "Featured Product",
       type: "boolean",
-      description: "Toggle to display in Home Page under EXCLUSIVE COLLECTION",
+      description: "Toggle to feature this product on the homepage.",
       initialValue: false,
     }),
 
     defineField({
-  name: "features",
-  title: "Features",
-  type: "array",
-  of: [
-    {
-      type: "object",
-      fields: [
-        {
-          name: "icon",
-          title: "Icon",
-          type: "image",
-          options: { hotspot: true },
-        },
-        {
-          name: "label",
-          title: "Label",
-          type: "string",
-        },
-      ],
-      preview: {
-        select: { title: "label", media: "icon" },
-      },
-    },
-  ],
-  description: "Feature highlights shown above description (with icon + label)",
-  initialValue: [], // 
-}),
-defineField({
-  name: "specifications",
-  title: "Specifications",
-  type: "array",
-  of: [
-    {
-      type: "object",
-      fields: [
-        {
-          name: "icon",
-          title: "Icon",
-          type: "image",
-          options: { hotspot: true },
-        },
-        {
-          name: "value",
-          title: "Value",
-          type: "string", // e.g. 27 cm, Leather, 15L
-          description: "Type with spaces to split words into lines",
-         
-        },
-      ],
-      preview: {
-        select: { title: "value", subtitle: "value", media: "icon" },
-      },
-    },
-  ],
-  description: "Detailed product specifications shown below description",
-   initialValue: [], // 
-}),
-defineField({
-  name: "realImages",
-  title: "Real Images",
-  type: "array",
-  of: [{ type: "image", options: { hotspot: true } }],
-  description: "Upload real photos of the product",
-  initialValue: [], // 
-}),
-    defineField({
       name: "description",
       title: "Description",
-      type: "text",
-      
+      type: "blockContent", // Use blockContent for rich text
+      description: "Tell the story behind this product, its craft, and details.",
     }),
-defineField({
-  name: "realVideos",
-  title: "Real Videos",
-  type: "array",
-  of: [
-    {
-      type: "file",
-      options: {
-        accept: "video/*", // restricts upload to video formats
-      },
+  ],
+
+  preview: {
+    select: {
+      title: "name",
+      category: "category.name",
+      media: "variants.0.images.0.asset",
     },
-  ],
-  description: "Upload real product videos (mp4, mov, etc.)",
-  initialValue: [], // 
-}),
-
-
-
-  ],
-
-preview: {
-  select: {
-    title: "name",
-    subtitle: "price",
-    media: "variants.0.images.0.asset",
+    prepare({ title, category, media }) {
+      return {
+        title,
+        subtitle: category ? `in ${category}` : "Product",
+        media: media || TrolleyIcon,
+      };
+    },
   },
-  prepare({ title, subtitle, media }) {
-    return {
-      title,
-      subtitle: subtitle ? `LKR ${subtitle.toLocaleString("en-LK")}` : "",
-      media: media || TrolleyIcon, // fallback
-    };
-  },
-},
-
 });

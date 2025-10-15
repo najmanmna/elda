@@ -1,42 +1,23 @@
 // src/store/index.ts
-/**
- * Cart Store (useCartStore)
- *
- * This file implements a global cart state for the ecommerce app using Zustand with persistence.
- * It manages cart items, product variants, and quantities, and provides actions for adding,
- * updating, and removing items. Toast notifications are used for user feedback on cart actions.
- *
- * Features:
- * - Add, update, and remove products/variants from the cart
- * - Increase/decrease item quantity with stock validation
- * - Persist cart state in localStorage
- * - Show toast notifications for cart actions and errors
- * - Utility to get item count by key
- *
- * Usage:
- * - Import and use `useCartStore` in components to access and modify cart state
- * - Cart state is automatically persisted and restored across sessions
- *
- * Dependencies:
- * - Zustand (state management)
- * - react-hot-toast (notifications)
- * - TypeScript types for products and images
- */
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Product } from "@/sanity.types";
 import type { SanityImage } from "@/types/sanity-helpers";
 import toast from "react-hot-toast";
 
+// ✅ 1. Import the ProductPayload type
+import { ProductPayload } from "@/types";
+
 export interface CartVariant {
   _key: string;
-  color?: string;
+  name?: string; 
   availableStock?: number;
   images?: SanityImage[];
 }
 
 export interface CartItem {
-  product: Product;
+  // ✅ 2. Use ProductPayload instead of the base Product type
+  product: ProductPayload;
   variant: CartVariant;
   itemKey: string;
   quantity: number;
@@ -44,7 +25,8 @@ export interface CartItem {
 
 interface StoreState {
   items: CartItem[];
-  addItem: (product: Product, variant: CartVariant) => void;
+  // The product parameter now correctly expects a ProductPayload
+  addItem: (product: ProductPayload, variant: CartVariant, quantity?: number) => void;
   increaseQuantity: (itemKey: string) => void;
   decreaseQuantity: (itemKey: string) => void;
   deleteCartProduct: (itemKey: string) => void;
@@ -58,33 +40,33 @@ const useCartStore = create<StoreState>()(
     (set, get) => ({
       items: [],
 
-      addItem: (product, variant) =>
+      addItem: (product, variant, quantity = 1) =>
         set((state) => {
           const itemKey = `${product._id}-${variant._key}`;
           const existing = state.items.find((i) => i.itemKey === itemKey);
 
-          if (!existing) {
-            if ((variant.availableStock ?? 0) <= 0) {
-              toast.error("This product is out of stock");
-              return state;
-            }
-            toast.success(`${product.name} (${variant.color ?? "default"}) added!`);
-            return {
-              items: [...state.items, { product, variant, itemKey, quantity: 1 }],
-            };
+          const stock = variant.availableStock ?? 0;
+          const requestedQuantity = existing ? existing.quantity + quantity : quantity;
+          
+          if (requestedQuantity > stock) {
+            toast.error("Cannot add more than available stock");
+            return state;
           }
 
-          const stock = existing.variant.availableStock ?? 0;
-          if (existing.quantity < stock) {
-            toast.success(`${product.name} (${variant.color ?? "default"}) added!`);
+          if (existing) {
+            toast.success(`${product.name} quantity updated!`);
             return {
               items: state.items.map((i) =>
-                i.itemKey === itemKey ? { ...i, quantity: i.quantity + 1 } : i
+                i.itemKey === itemKey
+                  ? { ...i, quantity: i.quantity + quantity }
+                  : i
               ),
             };
           } else {
-            toast.error("Cannot add more than available stock");
-            return state;
+            toast.success(`${product.name} (${variant.name ?? "default"}) added!`);
+            return {
+              items: [...state.items, { product, variant, itemKey, quantity }],
+            };
           }
         }),
 
@@ -92,11 +74,18 @@ const useCartStore = create<StoreState>()(
         set((state) => {
           const item = state.items.find((i) => i.itemKey === itemKey);
           if (!item) return state;
+
+          // This line will now work correctly without errors
+          const isFabric = item.product.category?.slug === 'fabrics';
+          const increment = isFabric ? 0.5 : 1;
+
           const stock = item.variant.availableStock ?? 0;
-          if (item.quantity < stock) {
+          if (item.quantity + increment <= stock) {
             return {
               items: state.items.map((i) =>
-                i.itemKey === itemKey ? { ...i, quantity: i.quantity + 1 } : i
+                i.itemKey === itemKey
+                  ? { ...i, quantity: i.quantity + increment }
+                  : i
               ),
             };
           } else {
@@ -106,15 +95,23 @@ const useCartStore = create<StoreState>()(
         }),
 
       decreaseQuantity: (itemKey) =>
-        set((state) => ({
-          items: state.items
-            .map((i) =>
-              i.itemKey === itemKey
-                ? { ...i, quantity: Math.max(0, i.quantity - 1) }
-                : i
-            )
-            .filter((i) => i.quantity > 0),
-        })),
+        set((state) => {
+          const item = state.items.find((i) => i.itemKey === itemKey);
+          if (!item) return state;
+
+          // This line will now work correctly without errors
+          const isFabric = item.product.category?.slug === 'fabrics';
+          const decrement = isFabric ? 0.5 : 1;
+          const newQuantity = item.quantity - decrement;
+
+          return {
+            items: state.items
+              .map((i) =>
+                i.itemKey === itemKey ? { ...i, quantity: newQuantity } : i
+              )
+              .filter((i) => i.quantity > 0), 
+          };
+        }),
 
       deleteCartProduct: (itemKey) =>
         set((state) => ({
@@ -123,7 +120,6 @@ const useCartStore = create<StoreState>()(
 
       resetCart: () => set({ items: [] }),
 
-      // ✅ Replace the variant completely to ensure fresh stock is used
       updateItemVariant: (itemKey, variant) =>
         set((state) => ({
           items: state.items.map((i) =>

@@ -3,26 +3,41 @@ import PriceFormatter from "./PriceFormatter";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  price: number | undefined;
-  discount: number | undefined;
+  price?: number | null;
+  discount?: number | null;
   className?: string;
+  unitLabel?: string; // ✅ new prop
 }
-const PriceView = ({ price, discount, className }: Props) => {
+
+const PriceView = ({ price, discount, className, unitLabel }: Props) => {
+  if (!price) return null;
+
+  const hasDiscount = discount && discount > 0;
+  const finalPrice = hasDiscount ? price - (discount * price) / 100 : price;
+
   return (
-    <div className="flex items-center justify-between gap-5">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col items-center gap-0">
+      {/* Original price on top if discounted */}
+      {/* {hasDiscount && (
         <PriceFormatter
           amount={price}
-          className={cn("text-tech_orange", className)}
+          className={twMerge(
+            "line-through text-xs text-tech_dark/70",
+            className
+          )}
         />
-        {price && discount && (
-          <PriceFormatter
-            amount={price + (discount * price) / 100}
-            className={twMerge(
-              "line-through text-xs font-normal text-tech_dark/70",
-              className
-            )}
-          />
+      )} */}
+
+      {/* Final price with optional unit label */}
+      <div className="flex items-baseline gap-1">
+        <PriceFormatter
+          amount={finalPrice}
+          className={cn("text-tech_orange font-semibold", className)}
+        />
+        {unitLabel && (
+          <span className="text-xs sm:text-sm text-tech_dark/70">
+            {unitLabel}
+          </span>
         )}
       </div>
     </div>

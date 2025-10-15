@@ -19,8 +19,8 @@ export default defineConfig({
   },
   plugins: [
     deskTool({ structure,defaultDocumentNode }), // ✅ custom order dashboard
-     stockReportTool(), // ✅ add the stock report tool
-     ordersSummaryTool(), // ✅ add the orders summary tool
+    //  stockReportTool(), // ✅ add the stock report tool
+    //  ordersSummaryTool(), // ✅ add the orders summary tool
     // visionTool({
     //   defaultApiVersion: process.env.VITE_SANITY_API_VERSION || "2024-11-09",
     // }),

@@ -23,7 +23,7 @@ const CartMenu: React.FC<CartMenuProps> = ({ color = "black" }) => {
       
       }}
     >
-      <Link href="/">
+      <Link href="/cart">
         <div className={`p-3 hoverEffect relative ${iconColor}`}>
           <CartLogo />
           {cartCount > 0 && (

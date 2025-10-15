@@ -7,8 +7,7 @@ import {
   FEATURE_PRODUCTS,
   FEATURED_CATEGORY_QUERY,
   PRODUCT_BY_SLUG_QUERY,
-  HOT_PRODUCTS_QUERY,
-  DEAL_PRODUCTS_QUERY,
+
   NEW_PRODUCTS_QUERY,
 } from "./query";
 
@@ -60,26 +59,26 @@ const getFeaturedProducts = async () => {
 };
 
 // 🔹 Hot Products
-const getHotProducts = async () => {
-  try {
-    const { data } = await sanityFetch({ query: HOT_PRODUCTS_QUERY });
-    return data ?? [];
-  } catch (error) {
-    console.log("Error fetching hot products:", error);
-    return [];
-  }
-};
+// const getHotProducts = async () => {
+//   try {
+//     const { data } = await sanityFetch({ query: HOT_PRODUCTS_QUERY });
+//     return data ?? [];
+//   } catch (error) {
+//     console.log("Error fetching hot products:", error);
+//     return [];
+//   }
+// };
 
 // 🔹 Deal Products
-const getDealProducts = async () => {
-  try {
-    const { data } = await sanityFetch({ query: DEAL_PRODUCTS_QUERY });
-    return data ?? [];
-  } catch (error) {
-    console.log("Error fetching deal products:", error);
-    return [];
-  }
-};
+// const getDealProducts = async () => {
+//   try {
+//     const { data } = await sanityFetch({ query: DEAL_PRODUCTS_QUERY });
+//     return data ?? [];
+//   } catch (error) {
+//     console.log("Error fetching deal products:", error);
+//     return [];
+//   }
+// };
 
 // 🔹 New Products
 const getNewProducts = async () => {
@@ -107,12 +106,22 @@ const getAddresses = async () => {
 const getCategories = async (quantity?: number) => {
   try {
     const query = quantity
-      ? `*[_type == 'category'] | order(name asc)[0...$quantity]{
+      ? `*[_type == 'category' && !defined(parent)] | order(name asc)[0...$quantity]{
           ...,
+          "subcategories": *[_type == "category" && references(^._id)]{
+            _id,
+            name,
+            slug
+          },
           "productCount": count(*[_type == "product" && references(^._id)])
         }`
-      : `*[_type == 'category'] | order(name asc){
+      : `*[_type == 'category' && !defined(parent)] | order(name asc){
           ...,
+          "subcategories": *[_type == "category" && references(^._id)]{
+            _id,
+            name,
+            slug
+          },
           "productCount": count(*[_type == "product" && references(^._id)])
         }`;
 
@@ -127,6 +136,7 @@ const getCategories = async (quantity?: number) => {
     return [];
   }
 };
+
 
 // 🔹 Product by Slug (single)
 const getProductBySlug = async (slug: string) => {
@@ -149,8 +159,7 @@ export {
   getFeaturedCategory,
   getAllProducts,
   getFeaturedProducts,
-  getHotProducts,
-  getDealProducts,
+  
   getNewProducts,
   getAddresses,
   getCategories,

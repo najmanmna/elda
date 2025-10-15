@@ -1,43 +1,47 @@
+// schemas/categoryType.ts
 import { TagIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
 export const categoryType = defineType({
   name: "category",
-  title: "Category",
+  title: "Categories & Subcategories",
   type: "document",
   icon: TagIcon,
   fields: [
     defineField({
-      name: "title",
+      name: "name",
+      title: "Name",
       type: "string",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "slug",
+      title: "Slug",
       type: "slug",
-      options: {
-        source: "title",
-      },
+      options: { source: "name", maxLength: 96 },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "description",
-      type: "text",
-    }),
-
- 
-    defineField({
-      name: "image",
-      title: "Category Image",
-      type: "image",
+      name: "parent",
+      title: "Parent Category",
+      type: "reference",
+      to: [{ type: "category" }],
+      description: "Leave empty for a main category. Assign a parent to make this a subcategory.",
       options: {
-        hotspot: true,
+        filter: "!defined(parent)", // Only allow main categories to be selected as a parent
       },
     }),
   ],
   preview: {
     select: {
-      title: "title",
-      subtitle: "description",
-      media: "image",
+      title: "name",
+      parent: "parent.name",
+    },
+    prepare({ title, parent }) {
+      return {
+        title,
+        subtitle: parent ? `Subcategory of ${parent}` : "Main Category",
+      };
     },
   },
 });

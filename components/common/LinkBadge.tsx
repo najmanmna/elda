@@ -25,7 +25,7 @@ const LinkBadge = () => {
     const lastSegment = pathSegments[pathSegments.length - 1];
 
     return (
-      <div className="bg-tech_white py-5">
+      <div className=" pt-20 py-5">
         <Container className="flex items-center gap-2 text-sm">
           <Link
             href="/account/account"
@@ -58,7 +58,7 @@ const LinkBadge = () => {
   // For all other routes
   if (pathSegments.length > 0) {
     return (
-      <div className="bg-tech_white py-5">
+      <div className=" pt-15">
         <Container className="flex items-center gap-2 text-sm">
           <Link href="/" className="hover:text-tech_orange hoverEffect">
             <Home size={17} />

@@ -16,7 +16,7 @@ import borderTile from "../public/line-motif.png";
 const categories = [
   { title: "FABRICS", value: "fabrics", image: img1 },
 
-  { title: "HOME & BEDDING", value: "home-bedding", image: img3 },
+  { title: "HOME & BEDDING", value: "home-and-bedding", image: img3 },
   { title: "CLOTHING", value: "clothing", image: img2 },
   { title: "ACCESSORIES", value: "accessories", image: img4 },
 ];
@@ -25,8 +25,7 @@ const ProductStatusSelector = () => {
   const router = useRouter();
 
   const handleClick = (value: string) => {
-    // router.push(`/category/${value}`);
-    router.push(`/`);
+    router.push(`/category/${value}`);
   };
 
   return (

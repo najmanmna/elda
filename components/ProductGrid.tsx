@@ -19,14 +19,33 @@ const ProductGrid = () => {
   const [products, setProducts] = useState<ALL_PRODUCTS_QUERYResult>([]);
   const [loading, setLoading] = useState(false);
 
-  const query = `*[_type == "product" && isFeatured == true] | order(name asc)[0...10]{
-    _id, name, slug, images[]{asset->{url}}, description,
-    price, discount,
-    variants[]{_key, openingStock, stockOut,
+ const query = `*[_type == "product" && isFeatured == true] | order(name asc)[0...10]{
+    _id,
+    name,
+    slug,
+    description,
+    price,
+    discount,
+    category->{
+      _id,
+      name,
+      slug
+    },
+    subcategory->{
+      _id,
+      name,
+      slug
+    },
+    variants[]{
+      _key,
+      variantName,
+      openingStock,
+      stockOut,
       "availableStock": openingStock - coalesce(stockOut, 0),
-      images[]{asset->{url}}
+      images[]{ asset->{url} }
     }
   }`;
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,7 +94,7 @@ const ProductGrid = () => {
           This Month’s Heritage Edit
         </h2>
         <p className="text-tech_gold mt-2 text-lg sm:text-xl">
-          Handpicked For Everyday Charm.
+          Handpicked For Everyday Elegance.
         </p>
       </div>
 
@@ -119,7 +138,7 @@ const ProductGrid = () => {
 
           {/* Button below the grid */}
           <div className="flex justify-center mt-15">
-            <Link href="/">
+            <Link href="/shop">
               <button
                 className="
                   bg-tech_primary text-white px-6 py-3 font-semibold border border-tech_gold
@@ -129,7 +148,7 @@ const ProductGrid = () => {
                   hover:scale-105
                 "
               >
-                VIEW MORE
+                VIEW COLLECTION
               </button>
             </Link>
           </div>

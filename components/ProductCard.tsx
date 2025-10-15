@@ -6,19 +6,17 @@ import Link from "next/link";
 import Title from "./Title";
 import { image } from "@/sanity/image";
 
-// ✅ Import your background image
-import cardBg from "../public/texture.png"; // <-- replace with your image path
+// ✅ Background texture
+import cardBg from "../public/texture.png";
 
 type ProductWithVariants = ALL_PRODUCTS_QUERYResult[number];
 
 const ProductCard = ({ product }: { product: ProductWithVariants }) => {
-  // ✅ Collect first image from each variant safely
   const variantImages =
     product?.variants
       ?.map((v) => v?.images?.[0])
       .filter((img): img is NonNullable<typeof img> => Boolean(img)) || [];
 
-  // ✅ Always calculate stock robustly
   const totalStock =
     product?.variants?.reduce((acc, v) => {
       if (!v) return acc;
@@ -26,10 +24,9 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
         typeof v.availableStock === "number"
           ? v.availableStock
           : (v.openingStock || 0) - (v.stockOut || 0);
-      return acc + Math.max(stock, 0); // never negative
+      return acc + Math.max(stock, 0);
     }, 0) || 0;
 
-  // ✅ Track hover state
   const [hovered, setHovered] = useState(false);
 
   const primaryImage = variantImages[0];
@@ -42,57 +39,95 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
       onMouseLeave={() => setHovered(false)}
       style={{
         backgroundImage: `url(${cardBg.src})`,
-       backgroundBlendMode: "multiply",
+        backgroundBlendMode: "multiply",
         backgroundSize: "cover",
       }}
     >
-      <div className=" p-4 flex flex-col h-96 sm:h-96 ">
+      <div className="py-4 px-4 flex flex-col min-h-[440px] relative">
+        {/* Discount Badge */}
+        {product.discount && (
+          <div className="absolute top-2 left-2 bg-tech_gold text-white text-xs font-bold px-2 py-0.5 rounded z-20">
+            -{product.discount}%
+          </div>
+        )}
+
+        {/* Stock Overlay */}
+        {totalStock === 0 && (
+          <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white font-bold text-lg z-30">
+            OUT OF STOCK
+          </div>
+        )}
+
         {/* Product Image */}
-        <div className="relative w-full border-2 border-tech_gold overflow-hidden ">
-          {/* <Link href={`/product/${product?.slug?.current || ""}`}> */}
-          <Link href={`/`}>
+        <div className="relative w-full border-2 border-tech_gold overflow-hidden rounded-lg flex items-center justify-center bg-tech_white z-10">
+          <Link href={`/product/${product?.slug?.current || ""}`}>
             {primaryImage && (
-              <img
-                src={
-                  hovered && secondaryImage
-                    ? image(secondaryImage).width(620).height(750).url()
-                    : image(primaryImage).width(620).height(750).url()
-                }
-                alt={product?.name || "productImage"}
-                loading="lazy"
-                className={`w-full h-auto max-h-80 object-contain bg-tech_white transition-all duration-500
-                  ${totalStock > 0 ? "group-hover:scale-105" : "opacity-50"}`}
-              />
+              <>
+                <img
+                  src={image(primaryImage).width(620).height(750).url()}
+                  alt={product?.name || "productImage"}
+                  className={`w-full h-auto max-h-80 object-contain transition-opacity duration-500 ${
+                    hovered && secondaryImage ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+                {secondaryImage && (
+                  <img
+                    src={image(secondaryImage).width(620).height(750).url()}
+                    alt={product?.name || "productImage"}
+                    className={`absolute top-0 left-0 w-full h-auto max-h-80 object-contain transition-opacity duration-500 ${
+                      hovered ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                )}
+              </>
             )}
           </Link>
         </div>
 
         {/* Product Details */}
-        <div className="p-4 flex flex-col items-center gap-2 flex-1">
-          <Title className="text-xl sm:text-xl font-cormorant line-clamp-2 text-center">
+        <div className="p-4 flex flex-col items-center gap-2 flex-1 text-center relative">
+          <Title className="text-xl sm:text-xl font-cormorant line-clamp-2">
             {product?.name}
           </Title>
 
-          <PriceView
-            price={product?.price}
-            discount={product?.discount}
-            className="text-sm sm:text-lg"
-          />
+          {/* Category/Subcategory Badges */}
+          <div className="flex gap-1 justify-center mt-1 flex-wrap">
+            {product.category && (
+              <span className="bg-tech_primary text-white text-xs px-2 py-0.5 rounded">
+                {product.category.name}
+              </span>
+            )}
+            {product.subcategory && (
+              <span className="bg-tech_gold text-white text-xs px-2 py-0.5 rounded">
+                {product.subcategory.name}
+              </span>
+            )}
+          </div>
 
-          {totalStock === 0 && (
-            <p className="text-sm text-red-600 font-semibold">OUT OF STOCK</p>
-          )}
+          {/* Price / Shop Now container */}
+          <div className="mt-2 relative w-full h-6">
+            {!hovered && totalStock > 0 && (
+              <PriceView
+                price={product?.price}
+                discount={product?.discount}
+                className="text-sm sm:text-lg"
+                unitLabel={
+                  product?.category?.name?.toLowerCase() === "fabrics"
+                    ? "/meter"
+                    : undefined
+                }
+              />
+            )}
 
-          {/* Shop Now Button */}
-          {totalStock > 0 && (
-            <Link
-              // href={`/product/${product?.slug?.current || ""}`}
-                   href={`/`}
-              className="mt-2 inline-block px-3 py-2 sm:px-6 sm:py-2 bg-tech_primary text-white text-sm font-semibold shadow hover:bg-tech_dark transition-colors"
-            >
-              SHOP NOW
-            </Link>
-          )}
+            {hovered && totalStock > 0 && (
+              <Link
+                href={`/product/${product?.slug?.current || ""}`}
+                className="absolute inset-0 bg-tech_primary text-white px-4 py-4 rounded flex items-center justify-center font-semibold transition-opacity duration-300"
+              >
+                SHOP NOW
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </div>

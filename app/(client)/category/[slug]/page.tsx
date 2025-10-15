@@ -14,13 +14,13 @@ const CategoryPage = async ({
 
   return (
     <div>
-      <Container className="py-10">
-        <Title className="text-xl">
+      <Container className="py-0">
+        {/* <Title className="text-xl">
           Products by Category:{" "}
           <span className="font-bold text-green-600 capitalize tracking-wide">
             {slug}
           </span>
-        </Title>
+        </Title> */}
 
         <CategoryProducts categories={categories} slug={slug} />
       </Container>
