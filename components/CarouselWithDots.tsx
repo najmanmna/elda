@@ -14,21 +14,21 @@ const localBanners = [
     imageMobile: "/banners/bg1.png", // Use a specific mobile image if available
     heading: "Handcrafted Block Prints",
     subheading: "Inspired By Tradition, Sustainably Made",
-    link: "/products",
+    link: "/shop",
   },
   {
     imageDesktop: "/banners/bg2.png",
     imageMobile: "/banners/bg2.png",
     heading: "Artisanal Block Prints",
     subheading: "Every Piece Tells a Story of Craftsmanship",
-    link: "/products",
+    link: "/shop",
   },
   {
     imageDesktop: "/banners/bg3.png",
     imageMobile: "/banners/bg3.png",
     heading: "Sustainable Elegance",
     subheading: "Mindfully Made for the Modern Home",
-    link: "/products",
+    link: "/shop",
   },
 ];
 
