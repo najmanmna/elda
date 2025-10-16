@@ -49,8 +49,8 @@ const AllProductsGrid = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-10 min-h-[20rem] space-y-4 text-center rounded-lg w-full mt-10">
-        <motion.div className="flex items-center space-x-2 text-tech_primary">
+      <div className="flex flex-col items-center justify-center py-10 min-h-[20rem] bg-tech_bg_color space-y-4 text-center rounded-lg w-full mt-10">
+        <motion.div className="flex items-center space-x-2 text-tech_primary ">
           <Loader2 className="w-5 h-5 animate-spin" />
           <span>Loading all products...</span>
         </motion.div>

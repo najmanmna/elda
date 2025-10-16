@@ -178,25 +178,25 @@ const SearchBar: React.FC<SearchBarProps> = ({ color = "black" }) => {
               {products.map((product) => (
                 <Link
                   key={product?._id}
-                  href={"/"}
-                  // href={`/product/${product?.slug?.current}`}
+                  href={`/product/${product?.slug?.current}`}
                   onClick={() => {
                     setShowResults(false);
                     setSearch("");
                   }}
-                  className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 hover:bg-gray-50"
+                  className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 hover:bg-accent/50"
                 >
-                  {product?.images && (
-                    <div className="w-12 h-12 bg-gray-50 rounded overflow-hidden">
+                  {product.variants?.[0]?.images?.[0]?.asset && (
+                    <div className="w-12 h-12 bg-accent rounded overflow-hidden">
                       <Image
                         width={48}
                         height={48}
-                        src={urlFor(product?.images[0]).url()}
-                        alt="product"
-                        className="object-contain w-full h-full"
+                        src={urlFor(product.variants[0].images[0].asset).url()}
+                        alt={product.name ?? "product"}
+                        className="object-cover aspect-[4/5] w-full h-full"
                       />
                     </div>
                   )}
+
                   <div>
                     <h3 className="text-sm font-medium text-gray-800 line-clamp-1">
                       {product.name}

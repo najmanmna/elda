@@ -1,150 +1,143 @@
-import { X } from "lucide-react";
+"use client";
+
+import { X, ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import Logo from "../LogoWhite";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useOutsideClick } from "@/hooks";
 import { quickLinksDataMenu } from "@/constants";
-
-
-import { Category } from "@/sanity.types";
-import { statuses } from "@/constants";
+import { ExpandedCategory } from "./MobileMenu";
 
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  categories?: Category[];
+  categories?: ExpandedCategory[];
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
   const pathname = usePathname();
   const sidebarRef = useOutsideClick<HTMLDivElement>(onClose);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-  const [hovered, setHovered] = useState<"bags" | "accessories" | null>(null);
+  const mainCategories = categories?.filter((cat) => !cat.parent?._id);
+  const getSubcategories = (parentId: string) =>
+    categories?.filter((cat) => cat.parent?._id === parentId);
+
+  const handleCategoryClick = (categoryId: string) => {
+    setActiveCategory((prevId) => (prevId === categoryId ? null : categoryId));
+  };
 
   return (
-    <div
-      className={`fixed inset-y-0 h-screen left-0 z-50 w-72 sm:w-full bg-primary/50 shadow-xl transform ${
-        isOpen ? "translate-x-0" : "-translate-x-full"
-      } transition-transform ease-in-out duration-300`}
-      ref={sidebarRef}
-    >
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.3 }}
-        className="min-w-72 max-w-96 bg-tech_black z-50 h-screen p-10 border-r border-r-tech_white flex flex-col gap-7"
-      >
-        {/* Logo + Close */}
-        <div className="flex items-center justify-between">
-          <Logo />
-          <button
-            onClick={onClose}
-            className="hover:text-tech_white hoverEffect text-gray-300"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 bg-black/40 z-40"
+        >
+          <motion.div
+            ref={sidebarRef}
+            initial={{ x: "-100%" }}
+            animate={{ x: "0%" }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "tween", duration: 0.4, ease: "easeOut" }}
+            className="fixed top-0 left-0 w-full max-w-sm bg-[#FDFBF6] z-50 h-screen p-6 shadow-2xl flex flex-col gap-8"
           >
-            <X />
-          </button>
-        </div>
-
-        {/* Categories */}
-        {categories && categories.length > 0 && (
-          <div>
-            {/* BAGS */}
-            <div
-              className="cursor-pointer"
-              onMouseEnter={() => setHovered("bags")}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <div className="flex items-center font-bold gap-8 text-xl uppercase hover:text-white hover:[text-shadow:0_0_10px_rgba(255,255,255,0.6)] tracking-wide text-gray-200 mb-7">
-                <span>BAGS<span className="text-3xl ml-5 font-bold">→</span></span>
-                
-              </div>
-
-              <AnimatePresence>
-                {hovered === "bags" && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col gap-2 pl-6 overflow-hidden mb-6"
-                  >
-                    {categories.map((cat) => (
-                      <Link
-                        onClick={onClose}
-                        key={cat._id}
-                        href={`/category/${cat.slug?.current}`}
-                        className={`hover:text-white hover:[text-shadow:0_0_10px_rgba(255,255,255,0.6)] transition text-gray-300 ${
-                          pathname === `/category/${cat.slug?.current}` &&
-                          "text-gray-100"
-                        }`}
-                      >
-                        {cat.title}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* ACCESSORIES */}
-            <div
-              className="flex items-center font-bold gap-2 text-xl tracking-wide text-gray-200 hover:text-white hover:[text-shadow:0_0_10px_rgba(255,255,255,0.6)] cursor-pointer"
-              onMouseEnter={() => setHovered("accessories")}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <span>ACCESSORIES</span>
-            </div>
-
-            <AnimatePresence>
-              {hovered === "accessories" && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="pl-6 pt-2 text-gray-500 text-sm"
-                >
-                  (Coming Soon)
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        )}
-
-        {/* Statuses */}
-        <div>
-          <div className="flex flex-col gap-8 text-xl font-bold">
-            {statuses.map((status) => (
-              <Link
+            <div className="flex items-center justify-between">
+              <h2 className="font-serif text-2xl font-medium text-[#2C3E50]">
+                Menu
+              </h2>
+              <button
                 onClick={onClose}
-                key={status.value}
-                href={`/deal/${status.value}`}
-                className={`hover:text-white transition hover:[text-shadow:0_0_10px_rgba(255,255,255,0.6)] text-gray-200 ${
-                  pathname === `/deal/status/${status.value}` &&
-                  "text-tech_orange"
-                }`}
+                className="text-gray-500 hover:text-[#2C3E50] p-1 transition-colors"
               >
-                {status.title}
-              </Link>
-            ))}
-          </div>
-          <ul className="space-y-3 mt-10">
-                        {quickLinksDataMenu?.map((item) => (
-                          <li key={item?.title}>
-                            <Link
-                              href={item?.href}
-                              className="text-gray-300 hover:text-white text-sm font-normal transition-colors"
-                            >
-                              {item?.title}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-        </div>
-      </motion.div>
-    </div>
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="flex-grow overflow-y-auto pr-2">
+              {mainCategories?.length ? (
+                mainCategories.map((mainCat) => {
+                  const subcategories = getSubcategories(mainCat._id!);
+                  const isActive = activeCategory === mainCat._id;
+
+                  return (
+                    <div key={mainCat._id} className="mb-4">
+                      <div
+                        onClick={() => handleCategoryClick(mainCat._id!)}
+                        className="flex items-center justify-between cursor-pointer font-serif text-xl text-[#2C3E50] hover:text-[#A67B5B] transition-colors duration-200"
+                      >
+                        <span>{mainCat.name}</span>
+                        <ChevronDown
+                          className={`transform transition-transform duration-300 ${
+                            isActive ? "rotate-180 text-[#A67B5B]" : "rotate-0"
+                          }`}
+                          size={20}
+                        />
+                      </div>
+
+                      <AnimatePresence>
+                        {isActive && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="flex flex-col gap-3 pl-4 mt-3 border-l-2 border-gray-200 overflow-hidden"
+                          >
+                            {subcategories?.length ? (
+                              subcategories.map((sub) => (
+                                <Link
+                                  onClick={onClose}
+                                  key={sub._id}
+                                  href={`/category/${sub.slug?.current}`}
+                                  className={`hover:text-tech_primary transition text-gray-500 text-base ${
+                                    pathname ===
+                                      `/category/${sub.slug?.current}` &&
+                                    "text-tech_gold font-semibold"
+                                  }`}
+                                >
+                                  {sub.name}
+                                </Link>
+                              ))
+                            ) : (
+                              <span className="text-gray-400 text-sm">
+                                (No subcategories)
+                              </span>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-gray-400">Loading categories...</div>
+              )}
+            </div>
+
+            <div className="border-t border-gray-200 ">
+              <ul className="space-y-3">
+                {quickLinksDataMenu?.map((item) => (
+                  <li key={item?.title}>
+                    <Link
+                      href={item?.href}
+                      onClick={onClose}
+                      className="text-gray-600 hover:text-[#2C3E50] text-sm font-normal transition-colors"
+                    >
+                      {item?.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

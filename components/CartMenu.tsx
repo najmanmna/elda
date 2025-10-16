@@ -29,7 +29,7 @@ const CartMenu: React.FC<CartMenuProps> = ({ color = "black" }) => {
           {cartCount > 0 && (
   <span
     className={`absolute top-2 right-1 w-5 h-5 flex items-center justify-center rounded-full text-xs
-      ${color === "white" ? "bg-white text-tech_primary" : "bg-tech_dark text-white"}`}
+      ${color === "white" ? "bg-white text-tech_primary" : "bg-tech_primary text-white font-bold"}`}
   >
     {cartCount}
   </span>
