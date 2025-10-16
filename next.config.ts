@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "img.clerk.com",
       },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+      },
     ],
   },
   // Skip TypeScript errors during production build
@@ -24,3 +28,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+

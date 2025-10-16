@@ -490,10 +490,10 @@ export default function CheckoutPage() {
                     </Label>
                   </div>
                   <div className="flex items-center space-x-4">
-                    <RadioGroupItem value="BANK" id="bank" />
+                    {/* <RadioGroupItem value="BANK" id="bank" />
                     <Label htmlFor="bank" className="text-base">
                       Bank Transfer
-                    </Label>
+                    </Label> */}
                   </div>
                 </RadioGroup>
 

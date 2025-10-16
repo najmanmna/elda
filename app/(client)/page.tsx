@@ -4,6 +4,7 @@ import ProductStatusSelector from "@/components/ProductStatusSelector";
 import WhatIs from "@/components/WhatIs";
 import HeritageStory from "@/components/HeritageStory";
 import VisitStudio from "@/components/VisitStudio";
+import SocialShowcase from "@/components/SocialShowcase";
 
 export default async function Home() {
   return (
@@ -38,6 +39,7 @@ export default async function Home() {
         {/* <MissionSection /> */}
         <HeritageStory />
         <VisitStudio />
+        <SocialShowcase />
 
       
       </div>
