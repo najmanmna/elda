@@ -142,7 +142,7 @@ const SocialShowcase = () => {
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="font-playfair uppercase font-bold text-4xl  text-tech_primary mb-4">
+          <h2 className="font-playfair uppercase font-semibold text-4xl  text-tech_primary mb-4">
             Follow Our Journey
           </h2>
           <p className="max-w-2xl mx-auto text-tech_gold font-lato">
