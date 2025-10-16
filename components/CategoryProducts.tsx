@@ -125,60 +125,60 @@ const CategoryProducts = ({ categories, slug }: Props) => {
     <div className="py-5">
       {/* Categories Horizontal Scroll */}
       {/* Main Categories - Horizontal Scroll */}
-     {/* Categories Tab Bar */}
-<div className="flex justify-end items-start gap-6">
-  <div className="flex flex-col items-end gap-2">
-    {/* Main Categories */}
-    <div className="flex gap-3 border-b border-gray-300">
-      {categories.map((cat) => (
-        <button
-          key={cat._id}
-          onClick={() => {
-            setSelectedCategory(cat.slug?.current || "");
-            setSelectedSubcategory(null);
-            router.push(`/category/${cat.slug?.current}`, { scroll: false });
-          }}
-          className={`relative px-4 py-2 font-semibold whitespace-nowrap transition-all duration-200
+      {/* Categories Tab Bar */}
+      <div className="flex overflow-scroll sm:overflow-auto sm:justify-end items-start gap-6">
+        <div className="flex flex-col sm:items-end gap-2 mb-4">
+          {/* Main Categories */}
+          <div className="flex gap-3 border-b border-gray-300">
+            {categories.map((cat) => (
+              <button
+                key={cat._id}
+                onClick={() => {
+                  setSelectedCategory(cat.slug?.current || "");
+                  setSelectedSubcategory(null);
+                  router.push(`/category/${cat.slug?.current}`, {
+                    scroll: false,
+                  });
+                }}
+                className={`relative px-4 py-2 font-semibold whitespace-nowrap transition-all duration-200
             ${
               cat.slug?.current === selectedCategory
                 ? "text-white bg-tech_primary rounded-t-lg shadow-md"
                 : "text-gray-700 hover:text-tech_primary"
             }`}
-        >
-          {cat.name}
-          {cat.slug?.current === selectedCategory && (
-            <span className="absolute bottom-0 left-0 w-full h-1 bg-tech_gold rounded-t-full"></span>
-          )}
-        </button>
-      ))}
-    </div>
+              >
+                {cat.name}
+                {cat.slug?.current === selectedCategory && (
+                  <span className="absolute bottom-0 left-0 w-full h-1 bg-tech_gold rounded-t-full"></span>
+                )}
+              </button>
+            ))}
+          </div>
 
-    {/* Subcategories */}
-    {subcategories.length > 0 && (
-      <div className="flex gap-3 border-b border-gray-200">
-        {subcategories.map((sub) => (
-          <button
-            key={sub._id}
-            onClick={() => setSelectedSubcategory(sub.slug.current)}
-            className={`relative px-3 py-1 text-sm font-medium transition-all duration-200
+          {/* Subcategories */}
+          {subcategories.length > 0 && (
+            <div className="flex gap-3 border-b border-gray-200">
+              {subcategories.map((sub) => (
+                <button
+                  key={sub._id}
+                  onClick={() => setSelectedSubcategory(sub.slug.current)}
+                  className={`relative px-3 py-1 text-sm font-medium transition-all duration-200
               ${
                 sub.slug.current === selectedSubcategory
                   ? "text-white bg-tech_gold rounded-t-lg shadow-md"
                   : "text-gray-700 hover:text-tech_gold"
               }`}
-          >
-            {sub.name}
-            {sub.slug.current === selectedSubcategory && (
-              <span className="absolute bottom-0 left-0 w-full h-1 bg-tech_primary rounded-t-full"></span>
-            )}
-          </button>
-        ))}
+                >
+                  {sub.name}
+                  {sub.slug.current === selectedSubcategory && (
+                    <span className="absolute bottom-0 left-0 w-full h-1 bg-tech_primary rounded-t-full"></span>
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    )}
-  </div>
-</div>
-
-
 
       {/* Product Grid */}
       {loading ? (

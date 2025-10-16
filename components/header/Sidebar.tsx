@@ -44,7 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
             animate={{ x: "0%" }}
             exit={{ x: "-100%" }}
             transition={{ type: "tween", duration: 0.4, ease: "easeOut" }}
-            className="fixed top-0 left-0 w-full max-w-sm bg-[#FDFBF6] z-50 h-screen p-6 shadow-2xl flex flex-col gap-8"
+            className="fixed top-0 left-0 sm:w-full max-w-sm bg-[#FDFBF6] z-50 h-screen p-6 shadow-2xl flex flex-col gap-8"
           >
             <div className="flex items-center justify-between">
               <h2 className="font-serif text-2xl font-medium text-[#2C3E50]">

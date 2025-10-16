@@ -64,7 +64,7 @@ const AllProductsGrid = () => {
 
   return (
     <div className="px-2 md:px-4 lg:px-6 mt-6">
-      <h2 className="text-2xl md:text-3xl font-semibold text-tech_primary mb-4">
+      <h2 className="text-2xl font-playfair md:text-3xl font-semibold text-tech_primary mb-4">
         All Products
       </h2>
 

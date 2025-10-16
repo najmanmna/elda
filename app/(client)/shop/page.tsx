@@ -5,7 +5,7 @@ import AllProductsGrid from "@/components/AllProductsGrid";
 
 const ProductsPage = () => {
   return (
-    <Container className="py-10">
+    <Container className="py-5">
      
       <AllProductsGrid />
     </Container>

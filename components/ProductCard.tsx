@@ -43,7 +43,7 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
         backgroundSize: "cover",
       }}
     >
-      <div className="py-4 px-4 flex flex-col min-h-[400px] relative">
+      <div className=" py-2 sm:py-4 px-2 sm:px-4 flex flex-col min-h-[375px] sm:min-h-[400px] relative">
         {/* Discount Badge */}
         {product.discount && (
           <div className="absolute top-2 left-2 bg-tech_gold text-white text-xs font-bold px-2 py-0.5 rounded z-20">
@@ -66,7 +66,7 @@ const ProductCard = ({ product }: { product: ProductWithVariants }) => {
                 <img
                   src={image(primaryImage).width(620).height(750).url()}
                   alt={product?.name || "productImage"}
-                  className={`w-full h-auto max-h-80 object-contain transition-opacity duration-500 ${
+                  className={`w-full h-auto sm:max-h-80 object-contain transition-opacity duration-500 ${
                     hovered && secondaryImage ? "opacity-0" : "opacity-100"
                   }`}
                 />
