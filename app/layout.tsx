@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { SanityLive } from "@/sanity/lib/live";
-import { Toaster } from "react-hot-toast";
+import { Toaster as HotToaster } from "react-hot-toast";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 import "./globals.css";
@@ -30,11 +30,10 @@ export const metadata: Metadata = {
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
-    
     <html lang="en">
-       
-      <body className={`${poppins.variable} pt-25 antialiased bg-tech_bg_color relative`}>
-       
+      <body
+        className={`${poppins.variable} pt-25 antialiased bg-tech_bg_color relative`}
+      >
         {/* Background layer */}
         <div
           className="absolute inset-0"
@@ -52,31 +51,33 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
           {children}
 
           {/* Toaster */}
-         <Toaster
-        position="top-right"
-        toastOptions={{
-          duration: 4000,
-          style: {
-            borderRadius: "12px",
-            background: "#333",
-            color: "#fff",
-            padding: "16px",
-            fontWeight: "500",
-          },
-          success: {
-            iconTheme: {
-              primary: "#22c55e",
-              secondary: "#fff",
-            },
-          },
-          error: {
-            iconTheme: {
-              primary: "#ef4444",
-              secondary: "#fff",
-            },
-          },
-        }}
-      />
+          <HotToaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                borderRadius: "12px",
+                background: "#2C3E50", // Deep, elegant charcoal
+                color: "#FDFBF6", // Warm, off-white text
+                padding: "16px",
+                fontFamily: "var(--font-serif)", // Assumes you have a serif font variable
+                fontWeight: "500",
+                border: "1px solid #46627f", // Subtle border
+              },
+              success: {
+                iconTheme: {
+                  primary: "#5A7D7C", // Muted, earthy green
+                  secondary: "#FDFBF6",
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: "#B85C5C", // Soft terracotta red
+                  secondary: "#FDFBF6",
+                },
+              },
+            }}
+          />
 
           {/* Sanity Live */}
           <SanityLive />

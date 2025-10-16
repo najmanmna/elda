@@ -2,7 +2,44 @@
 
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
+
+// A custom SVG animation of a simple weaving loom
+const WeavingLoomIcon = ({ className }: { className?: string }) => {
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 100 60"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      {/* Warp threads (vertical) */}
+      {[...Array(8)].map((_, i) => (
+        <line
+          key={`warp-${i}`}
+          x1={15 + i * 10}
+          y1="5"
+          x2={15 + i * 10}
+          y2="55"
+          stroke="#2C3E50"
+          strokeOpacity="0.3"
+          strokeWidth="2"
+        />
+      ))}
+
+      {/* Shuttle (the moving part) */}
+      <motion.rect
+        x="5"
+        y="25"
+        width="15"
+        height="10"
+        rx="3"
+        fill="#A67B5B"
+        animate={{ x: [5, 80, 5] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </svg>
+  );
+};
 
 const NoProductAvailable = ({
   selectedTab,
@@ -14,7 +51,7 @@ const NoProductAvailable = ({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center py-10 min-h-80 space-y-4 text-center  rounded-lg w-full mt-10",
+        "flex flex-col items-center justify-center space-y-6 text-center rounded-lg w-full py-16 bg-[#FDFBF6]/50",
         className
       )}
     >
@@ -23,40 +60,38 @@ const NoProductAvailable = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-2xl font-bold text-gray-800">
-          No Product Available
-        </h2>
+        <WeavingLoomIcon className="w-24 h-auto text-gray-400" />
       </motion.div>
+
+      <motion.h2
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
+        className="font-serif text-3xl font-medium text-[#2C3E50]"
+      >
+        Our Artisans Are Weaving
+      </motion.h2>
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="text-gray-600"
+        className="max-w-md text-gray-500"
       >
-        We&apos;re sorry, but there are no products matching on{" "}
-        <span className="text-base font-semibold text-tech_dark_color">
-          {selectedTab}
-        </span>{" "}
-        criteria at the moment.
+        It seems every piece from the{" "}
+        {selectedTab && (
+          <span className="font-semibold text-[#A67B5B]">{selectedTab}</span>
+        )}{" "}
+        collection has found a home. New creations are on the loom.
       </motion.p>
-
-      <motion.div
-        animate={{ scale: [1, 1.1, 1] }}
-        transition={{ repeat: Infinity, duration: 1.5 }}
-        className="flex items-center space-x-2 text-tech_orange"
-      >
-        <Loader2 className="w-5 h-5 animate-spin" />
-        <span>We&apos;re restocking shortly</span>
-      </motion.div>
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-        className="text-sm text-gray-500"
+        transition={{ delay: 0.3, duration: 0.5 }}
+        className="text-sm text-gray-400"
       >
-        Please check back later or explore our other product categories.
+        Please check back soon or explore our other timeless collections.
       </motion.p>
     </div>
   );

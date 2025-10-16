@@ -176,7 +176,7 @@ export default function ProductClient({ product }: { product: any }) {
               </div>
             )}
 
-            {/* Quantity Selector Label & Stock Info */}
+       
             {/* Quantity Selector with Label and Available Stock */}
             <div className="flex flex-col gap-1 mt-4">
               {/* Label */}

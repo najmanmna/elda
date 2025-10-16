@@ -166,10 +166,11 @@ export default function CheckoutPage() {
     }
   }, [items, router]);
 
-  const subtotal = items.reduce(
-    (t, it) => t + (it.product.price ?? 0) * it.quantity,
-    0
-  );
+  const subtotal = items.reduce((acc, it) => {
+    const price = it.product.price ?? 0;
+    const discount = ((it.product.discount ?? 0) * price) / 100;
+    return acc + (price - discount) * it.quantity;
+  }, 0);
 
   const total = subtotal + shippingCost;
 
@@ -198,17 +199,30 @@ export default function CheckoutPage() {
         form,
         total,
         shippingCost,
-        items: items.map((i) => ({
-          product: { _id: i.product._id, price: i.product.price },
-          variantKey: i.variant._key, // ✅ important for stock update
-          variant: {
-            _key: i.variant._key,
-            color: i.variant.color,
-            availableStock: i.variant.availableStock,
-            images: i.variant.images,
-          },
-          quantity: i.quantity,
-        })),
+        items: items.map((i) => {
+          const price = i.product.price ?? 0;
+          const discount = ((i.product.discount ?? 0) * price) / 100;
+          const finalPrice = price - discount;
+
+          return {
+            product: {
+              _id: i.product._id,
+              name: i.product.name,
+              slug: i.product.slug?.current,
+              price,
+              discount: i.product.discount ?? 0,
+              finalPrice, // ✅ store actual charged price
+            },
+            variant: {
+              _key: i.variant._key,
+              color: i.variant.color,
+              availableStock: i.variant.availableStock,
+              images: i.variant.images,
+            },
+            quantity: i.quantity,
+            total: finalPrice * i.quantity, // ✅ total for this line item
+          };
+        }),
       };
 
       const res = await fetch("/api/checkout", {
@@ -401,12 +415,15 @@ export default function CheckoutPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {items.map(({ product, variant, quantity, itemKey }) => {
-                  // 👇 pick variant image first, else fall back to product image
                   const imageSource =
                     variant?.images?.[0] ?? product?.images?.[0];
                   const imageUrl = imageSource
                     ? urlFor(imageSource).url()
                     : "/fallback.png";
+
+                  const price = product.price ?? 0;
+                  const discount = ((product.discount ?? 0) * price) / 100;
+                  const finalPrice = price - discount;
 
                   return (
                     <div
@@ -419,16 +436,14 @@ export default function CheckoutPage() {
                           alt={product?.name || "Product image"}
                           width={50}
                           height={50}
-                          className="rounded-md border"
+                          className="rounded-md aspect-[4/5] border"
                         />
                         <div>
                           <p className="text-sm font-medium">{product?.name}</p>
                           <p className="text-xs text-gray-500">x {quantity}</p>
                         </div>
                       </div>
-                      <PriceFormatter
-                        amount={(product.price ?? 0) * quantity}
-                      />
+                      <PriceFormatter amount={finalPrice * quantity} />
                     </div>
                   );
                 })}
@@ -445,9 +460,9 @@ export default function CheckoutPage() {
                   </span>
                 </div>
 
-                <div className="text-xs text-gray-500">
+                {/* <div className="text-xs text-gray-500">
                   Estimated Delivery: 3-5 Working Days
-                </div>
+                </div> */}
 
                 <Separator />
 

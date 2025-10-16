@@ -274,10 +274,11 @@ const freshProducts = await backendClient.fetch(
 
  items: items.map((it: any) => {
   const fresh = freshProducts.find((p: any) => p._id === it.product._id);
-
   const matchedVariant = fresh?.variants?.find(
     (v: any) => v._key === it.variant?._key
   );
+
+  const price = it.product.finalPrice ?? it.product.price ?? 0;
 
   return {
     _type: "orderItem",
@@ -285,22 +286,21 @@ const freshProducts = await backendClient.fetch(
     product: { _type: "reference", _ref: it.product._id },
 
     variant: {
-      variantKey: matchedVariant?._key || it.variant?._key,
+      _key: matchedVariant?._key || it.variant?._key,
       color: matchedVariant?.color || it.variant?.color || "",
     },
 
     quantity: it.quantity,
-    price: it.product.price ?? 0,
-
+    price, // ✅ Final charged price
+    discount: it.product.discount ?? 0, // ✅ Track discount percentage
     productName: fresh?.name || "Unknown",
-
-    // ✅ Snapshot image always: variant > product > none
     productImage:
       matchedVariant?.images?.[0] ||
       fresh?.images?.[0] ||
       undefined,
   };
 }),
+
 
 
 

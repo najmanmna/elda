@@ -50,13 +50,19 @@ const CartPage = () => {
     }
   };
 
-  const subtotal = items.reduce((acc, it) => {
+  // Original total before discounts
+  const subtotal = items.reduce(
+    (acc, it) => acc + (it.product.price ?? 0) * it.quantity,
+    0
+  );
+
+  // Final total after discounts
+  const total = items.reduce((acc, it) => {
     const price = it.product.price ?? 0;
     const discount = ((it.product.discount ?? 0) * price) / 100;
+
     return acc + (price - discount) * it.quantity;
   }, 0);
-
-  const total = items.reduce((acc, it) => acc + (it.product.price ?? 0) * it.quantity, 0);
 
   return (
     <>
@@ -75,17 +81,34 @@ const CartPage = () => {
 
               {/* Cart Items List */}
               {items.map(({ product, variant, itemKey, quantity }) => {
-                const thumbnail = variant?.images?.[0] ?? product.images?.[0];
+                // Handle images safely
+                const productImages: any[] =
+                  (Array.isArray((product as any)?.images)
+                    ? (product as any)?.images
+                    : []) ?? [];
+                const thumbnail = variant?.images?.[0] ?? productImages?.[0];
+
                 const colorLabel = variant?.color ?? "-";
 
+                // Safe numeric values
+                const basePrice =
+                  typeof product?.price === "number" ? product.price : 0;
+                const discountPercent =
+                  typeof product?.discount === "number" ? product.discount : 0;
+                const discountedPrice =
+                  basePrice - (discountPercent * basePrice) / 100;
+
                 return (
-                  <Card key={itemKey} className="flex flex-col md:flex-row items-center md:items-start gap-4 p-4">
+                  <Card
+                    key={itemKey}
+                    className="flex flex-col md:flex-row items-center md:items-start gap-4 p-4"
+                  >
                     {/* Product Image */}
                     {thumbnail && (
-                      <Link href={`/product/${product?.slug?.current}`}>
+                      <Link href={`/product/${product?.slug?.current || ""}`}>
                         <Image
                           src={urlFor(thumbnail).url()}
-                          alt={product.name || "Product image"}
+                          alt={product?.name || "Product image"}
                           width={120}
                           height={120}
                           className="rounded-md object-cover border"
@@ -97,17 +120,28 @@ const CartPage = () => {
                     <div className="flex-1 flex flex-col md:flex-row md:justify-between gap-4 w-full">
                       <div className="space-y-1">
                         <Link
-                          href={`/product/${product?.slug?.current}`}
+                          href={`/product/${product?.slug?.current || ""}`}
                           className="font-semibold hover:text-tech_primary transition-colors"
                         >
-                          {product.name}
+                          {product?.name ?? "Unnamed Product"}
                         </Link>
                         <p className="text-sm text-gray-500 capitalize">
                           Color: {colorLabel}
                         </p>
-                        <p className="text-sm text-gray-500">
-                          Unit Price: <PriceFormatter amount={product.price as number} />
-                        </p>
+
+                        {/* Price (discounted + original) */}
+                        <div className="text-sm text-gray-500">
+                          {discountPercent > 0 ? (
+                            <>
+                              <span className="text-gray-400 line-through mr-2">
+                                <PriceFormatter amount={basePrice} />
+                              </span>
+                              <PriceFormatter amount={discountedPrice} />
+                            </>
+                          ) : (
+                            <PriceFormatter amount={basePrice} />
+                          )}
+                        </div>
                       </div>
 
                       {/* Quantity & Total */}
@@ -115,7 +149,7 @@ const CartPage = () => {
                         <QuantityButtons product={product} itemKey={itemKey} />
                         <p className="font-semibold">
                           Total:{" "}
-                          <PriceFormatter amount={(product.price as number) * quantity} />
+                          <PriceFormatter amount={discountedPrice * quantity} />
                         </p>
                         <button
                           onClick={() => handleDelete(itemKey)}
@@ -131,7 +165,7 @@ const CartPage = () => {
 
               {/* Cart Actions */}
               <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                <Link href="/" className="flex-1">
+                <Link href="/shop" className="flex-1">
                   <Button
                     variant="outline"
                     className="w-full flex items-center justify-center gap-2"
@@ -167,7 +201,10 @@ const CartPage = () => {
                   <Separator />
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <PriceFormatter amount={total} className="text-lg text-black" />
+                    <PriceFormatter
+                      amount={total}
+                      className="text-lg text-black"
+                    />
                   </div>
                   <Button
                     onClick={handleProceedToCheckout}
