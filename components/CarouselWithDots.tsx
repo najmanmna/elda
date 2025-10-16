@@ -1,33 +1,34 @@
 "use client";
+
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Container from "./Container";
 import Image from "next/image";
+import Link from "next/link";
 import { useIsMobile } from "@/hooks/useIsMobile";
 
+// Assuming your banner images are in the public folder
 const localBanners = [
   {
     imageDesktop: "/banners/bg1.png",
-    imageMobile: "/banners/bg1.png",
+    imageMobile: "/banners/bg1.png", // Use a specific mobile image if available
     heading: "Handcrafted Block Prints",
     subheading: "Inspired By Tradition, Sustainably Made",
-    buttonTheme: "dark",
-    link: "/shop",
+    link: "/products",
   },
   {
     imageDesktop: "/banners/bg2.png",
     imageMobile: "/banners/bg2.png",
-    heading: "Handcrafted Block Prints",
-    subheading: "Inspired By Tradition, Sustainably Made",
-    buttonTheme: "light",
-    link: "/shop",
+    heading: "Artisanal Block Prints",
+    subheading: "Every Piece Tells a Story of Craftsmanship",
+    link: "/products",
   },
   {
     imageDesktop: "/banners/bg3.png",
     imageMobile: "/banners/bg3.png",
-    heading: "Handcrafted Block Prints",
-    subheading: "Inspired By Tradition, Sustainably Made",
-    buttonTheme: "light",
-    link: "/shop",
+    heading: "Sustainable Elegance",
+    subheading: "Mindfully Made for the Modern Home",
+    link: "/products",
   },
 ];
 
@@ -35,89 +36,117 @@ const CarouselWithZoom = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const isMobile = useIsMobile();
 
-  // Slide change every 8s
+  const slideDuration = 8000; // 8 seconds per slide
+
   useEffect(() => {
     const interval = setInterval(() => {
       setSelectedIndex((prev) => (prev + 1) % localBanners.length);
-    }, 5000);
+    }, slideDuration);
     return () => clearInterval(interval);
   }, []);
 
+  // Animation variants
+  const textContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2, delayChildren: 0.3 },
+    },
+  };
+
+  const textItemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { ease: "easeOut", duration: 0.6 } },
+  };
+
   return (
     <Container className="w-full pt-28 sm:pt-15 lg:col-span-3">
-      <div className="relative w-full h-[40vh] sm:h-[80vh] overflow-hidden">
-        {localBanners.map((item, index) => {
-          const imageUrl = isMobile ? item.imageMobile : item.imageDesktop;
+      <div className="relative w-full h-[50vh] sm:h-[85vh] overflow-hidden rounded-lg shadow-md">
+        <AnimatePresence>
+          {localBanners.map((item, index) => {
+            const imageUrl = isMobile ? item.imageMobile : item.imageDesktop;
 
-          return (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                index === selectedIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-              }`}
-            >
-              <Image
-                src={imageUrl}
-                alt={`Banner ${index + 1}`}
-                fill
-                className="object-cover scale-100 hover:scale-105 transition-transform duration-[15000ms] ease-in-out"
-                priority={index === 0}
-              />
-              <div className="absolute inset-0 bg-black/20 z-0"></div>
-
-              {(item.heading || item.subheading) && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-6 z-10">
-                  {item.heading && (
-                    <h1 className="font-playfair text-white text-3xl sm:text-5xl font-bold drop-shadow-lg">
-                      {item.heading}
-                    </h1>
-                  )}
-                  {item.subheading && (
-                    <p className="font-lato text-white text-sm sm:text-lg mt-2 drop-shadow-md">
-                      {item.subheading}
-                    </p>
-                  )}
-                  <a
-                    href={item.link}
-                    className="mt-4 inline-block px-6 py-3 bg-tech_bg_color text-primary font-semibold shadow-lg hover:bg-tech_primary hover:text-white transition-colors duration-300"
+            return (
+              selectedIndex === index && (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.5, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                >
+                  <motion.div
+                    className="w-full h-full"
+                    initial={{ scale: 1 }}
+                    animate={{ scale: 1.1 }}
+                    transition={{ duration: slideDuration / 1000 + 1, ease: "linear" }}
                   >
-                    SHOP NOW
-                  </a>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                    <Image
+                      src={imageUrl}
+                      alt={`Banner ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      priority={index === 0}
+                    />
+                  </motion.div>
+                  <div className="absolute inset-0 bg-black/30" />
 
-        {/* Progress bars for each slide */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                  <motion.div
+                    variants={textContainerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 z-10"
+                  >
+                    <motion.h1
+                      variants={textItemVariants}
+                      className="font-playfair text-white text-4xl sm:text-6xl font-medium"
+                      style={{ textShadow: "0px 2px 4px rgba(0,0,0,0.5)" }}
+                    >
+                      {item.heading}
+                    </motion.h1>
+                    <motion.p
+                      variants={textItemVariants}
+                      className="text-white text-base sm:text-xl mt-4 max-w-lg"
+                      style={{ textShadow: "0px 1px 3px rgba(0,0,0,0.5)" }}
+                    >
+                      {item.subheading}
+                    </motion.p>
+                    <motion.div variants={textItemVariants} className="mt-8">
+                      <Link
+                        href={item.link}
+                        className="inline-block bg-[#FDFBF6] text-tech_primary font-semibold py-3 px-10 rounded-full shadow-lg hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105"
+                      >
+                        Shop Now
+                      </Link>
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
+              )
+            );
+          })}
+        </AnimatePresence>
+
+        {/* Progress bars */}
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 z-20">
           {localBanners.map((_, index) => (
             <div
               key={index}
-              className="w-16 h-1 bg-gray-300 overflow-hidden rounded"
+              onClick={() => setSelectedIndex(index)}
+              className="w-12 h-1 bg-white/30 rounded-full cursor-pointer"
             >
               {selectedIndex === index && (
-                <div
-                  className="h-1 bg-tech_primary"
-                  style={{ animation: "progress 5s linear forwards" }}
+                <motion.div
+                  className="h-full bg-white rounded-full"
+                  initial={{ width: "0%" }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: slideDuration / 1000, ease: "linear" }}
                 />
               )}
             </div>
           ))}
         </div>
       </div>
-
-      {/* Inline CSS for progress animation */}
-      <style jsx>{`
-        @keyframes progress {
-          0% {
-            width: 0%;
-          }
-          100% {
-            width: 100%;
-          }
-        }
-      `}</style>
     </Container>
   );
 };
