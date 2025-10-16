@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 
 // NOTE: Replace this import with the actual path to your empty cart illustration.
-import emptyCartIllustration from "@/public/cartempty.png";
+import emptyCartIllustration from "@/public/cartempty_nobg.png";
 
 // A more authentic, paisley-inspired block stamp icon
 const BlockStampIcon = ({ className }: { className?: string }) => (
@@ -42,7 +42,7 @@ export default function EmptyCart() {
       transition: {
         duration: 0.7,
         // ✅ CORRECTED THIS LINE
-        ease: "easeOut", 
+        ease: "easeOut",
       },
     },
   };
@@ -60,7 +60,10 @@ export default function EmptyCart() {
 
       {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center">
-        <motion.div variants={itemVariants} className="relative w-72 h-72 sm:w-80 sm:h-80 mb-6">
+        <motion.div
+          variants={itemVariants}
+          className="relative w-72 h-72 sm:w-80 sm:h-80 mb-6"
+        >
           {/* Floating Stamp 1 */}
           <motion.div
             className="absolute top-0 left-0 text-[#A67B5B]/20"
@@ -94,11 +97,14 @@ export default function EmptyCart() {
           >
             <BlockStampIcon className="w-12 h-12" />
           </motion.div>
-          
+
           {/* Main Illustration */}
           <motion.div
             className="w-full h-full flex items-center justify-center"
-            animate={{ scale: [1, 1.02, 1] }}
+            animate={{
+              scale: [1, 1.08, 1],
+              rotate: [0, 3, -3, 0], // gentle tilt effect
+            }}
             transition={{
               duration: 5,
               repeat: Infinity,
@@ -128,7 +134,8 @@ export default function EmptyCart() {
           variants={itemVariants}
           className="max-w-md text-gray-500 mb-8 text-lg"
         >
-          It’s waiting for a masterpiece. Discover handcrafted textiles to begin your next creation.
+          It’s waiting for a masterpiece. Discover handcrafted textiles to begin
+          your next creation.
         </motion.p>
 
         {/* Call to Action Button */}

@@ -4,6 +4,7 @@ import Container from "./Container";
 import bgPattern from "../public/heri2.png";
 import borderTile from "../public/line-motif.png";
 import { Volume2, VolumeX } from "lucide-react"; // sound icons
+import sectionBreak from "../public/sectionBreak.png";
 
 const VisitStudio = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -18,13 +19,21 @@ const VisitStudio = () => {
 
   return (
     <section
-      className="relative bg-white py-20 overflow-hidden"
+      className="relative bg-white py-20 "
       style={{
         backgroundImage: `url(${bgPattern.src})`,
         backgroundRepeat: "repeat",
         backgroundSize: "contain",
       }}
     >
+      
+      <div className="absolute -bottom-8 w-full  z-40 ">
+        <img
+          src={sectionBreak.src}
+          alt="Section divider flipped"
+          className="w-full h-auto object-cover rotate-180"
+        />
+      </div>
       {/* Overlay */}
       <div className="absolute inset-0 bg-white/85"></div>
 
