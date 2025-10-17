@@ -1,4 +1,5 @@
 "use client";
+
 import useCartStore from "@/store";
 import { Check, Home, ShoppingBag, Copy } from "lucide-react";
 import { motion } from "framer-motion";
@@ -7,145 +8,242 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
+// Custom Block Stamp Icon for the animation
+const BlockStampHandle = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M7.5 12h9" /> <path d="M6 15h12" /> <path d="M12 15v-3" />
+    <path d="M9 9a3 3 0 013-3h0a3 3 0 013 3v3H9V9z" />
+  </svg>
+);
+
 const SuccessPage = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const orderNumber = searchParams.get("orderNumber");
   const paymentMethod = searchParams.get("payment") || "Cash on Delivery";
-  const total = searchParams.get("total"); // ✅ fetch total from query
+  const total = searchParams.get("total");
 
   const resetCart = useCartStore((state) => state.resetCart);
   const [validAccess, setValidAccess] = useState(false);
 
   useEffect(() => {
-    // ✅ Check both session + query params
     const placed = sessionStorage.getItem("orderPlaced");
     if (!orderNumber || !paymentMethod || !placed) {
-      router.replace("/"); // 🚫 Kick user out if bypassing
+      router.replace("/");
       return;
     }
 
     setValidAccess(true);
     resetCart();
 
-    // one-time use flag
-    const handleUnload = () => {
-      sessionStorage.removeItem("orderPlaced");
-    };
+    const handleUnload = () => sessionStorage.removeItem("orderPlaced");
     window.addEventListener("beforeunload", handleUnload);
-
     return () => window.removeEventListener("beforeunload", handleUnload);
   }, [orderNumber, paymentMethod, router, resetCart]);
 
-  if (!validAccess) return null; // don't render until verified
+  if (!validAccess) return null;
 
-  // ✅ Bank details text
-  const bankDetails = `M.J.M IFHAM
-0110290723001
-Amana Bank Dehiwala`;
+  const bankDetails = `Amrin fabrics
+xxxxxxxx
+xxxxxx Bank Dehiwala`;
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+  };
 
   return (
-    <div className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen py-16 sm:py-24 px-4">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200/80 p-8 sm:p-12 text-center"
+      >
+        {/* Custom Stamping Animation */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white rounded-2xl shadow-xl p-8 text-center"
+          variants={itemVariants}
+          className="relative w-24 h-24 mx-auto mb-6"
         >
           <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: [0, 1, 1], scale: [0.5, 1, 1] }}
+            transition={{ duration: 1.5, ease: "easeOut", times: [0, 0.5, 1] }}
+            className="absolute inset-0 flex items-center justify-center bg-[#5A7D7C] rounded-full"
           >
-            <Check className="text-white w-10 h-10" />
+            <Check className="text-white w-12 h-12" />
           </motion.div>
+          <motion.div
+            initial={{ y: -50, opacity: 0 }}
+            animate={{ y: [-50, 10, 10], opacity: [1, 1, 0] }}
+            transition={{ duration: 1.5, ease: "easeOut", times: [0, 0.5, 1] }}
+            className="absolute inset-0 flex items-center justify-center text-[#A67B5B]"
+          >
+            <BlockStampHandle className="w-12 h-12" />
+          </motion.div>
+        </motion.div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-            Order Placed Successfully!
-          </h1>
-          <p className="text-gray-600 max-w-md mx-auto">
-            Thank you for your purchase. We’re processing your order and will
-            ship it soon.
-          </p>
+        <motion.h1
+          variants={itemVariants}
+          className="font-serif text-3xl sm:text-4xl font-medium text-[#2C3E50] mb-3"
+        >
+          Thank You For Your Order
+        </motion.h1>
+        <motion.p
+          variants={itemVariants}
+          className="text-gray-500 max-w-lg mx-auto mb-8"
+        >
+          Your order has been placed and is being prepared with care. A
+          confirmation will be sent to your email shortly.
+        </motion.p>
 
-          {/* Order Summary */}
-          <div className="bg-gray-50 rounded-xl p-6 mt-8 border border-gray-100 text-left">
-            <h2 className="font-semibold text-lg mb-4">Order Summary</h2>
-            <div className="space-y-4 text-sm sm:text-base">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center pb-2 border-b border-gray-200">
-                <span className="text-gray-600">Order Number:</span>
-                <span className="font-medium break-all">{orderNumber}</span>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                <span className="text-gray-600">Total:</span>
-                <span className="font-medium">Rs. {total || "N/A"}</span>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                <span className="text-gray-600">Estimated Delivery:</span>
-                <span className="font-medium">3–5 working days</span>
-              </div>
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                <span className="text-gray-600">Payment Method:</span>
-                <span className="font-medium">{paymentMethod}</span>
-              </div>
+        {/* Order Summary */}
+        <motion.div
+          variants={itemVariants}
+          className="bg-[#FDFBF6]/70 rounded-lg p-6 border text-left mb-6"
+        >
+          <h2 className="font-serif font-medium text-xl text-[#2C3E50] mb-4">
+            Order Summary
+          </h2>
+          <div className="space-y-4 text-sm text-gray-500">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200/80">
+              <span>Order Number:</span>
+              <span className="font-medium text-[#2C3E50] break-all">
+                {orderNumber}
+              </span>
             </div>
-          </div>
-
-          {/* ✅ Show bank details only if Bank Transfer chosen */}
-          {paymentMethod.toLowerCase().includes("bank") && (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mt-6 text-left">
-              <h3 className="font-semibold text-lg mb-3 text-yellow-800">
-                Bank Transfer Instructions
-              </h3>
-              <p className="text-sm text-gray-700 mb-4">
-                Please transfer <span className="font-medium">Rs. {total}</span>{" "}
-                using your{" "}
-                <span className="font-medium">Order Number {orderNumber}</span>{" "}
-                as the payment reference. Your order will be processed once we
-                confirm the payment.
-              </p>
-
-              <p className="font-medium mb-2">Bank Transfer Details:</p>
-              <div className="bg-white border rounded px-3 py-2 text-sm flex justify-between items-start">
-                <div className="flex-1 whitespace-pre-wrap font-mono">
-                  {bankDetails}
-                </div>
-                <button
-                  type="button"
-                  onClick={async () => {
-                    await navigator.clipboard.writeText(bankDetails);
-                    toast.success("Bank details copied!");
-                  }}
-                  className="ml-3 px-2 py-1 text-xs rounded bg-gray-200 hover:bg-gray-300 flex items-center gap-1"
-                >
-                  <Copy className="w-3 h-3" /> Copy
-                </button>
-              </div>
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200/80">
+              <span>Total:</span>
+              <span className="font-medium text-[#2C3E50]">
+                Rs. {total || "N/A"}
+              </span>
             </div>
-          )}
-
-          {/* Action buttons */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-            <Link
-              href="/"
-              className="flex items-center justify-center px-4 py-3 font-medium bg-black text-white rounded-lg hover:bg-gray-800 transition-all duration-300 shadow-md"
-            >
-              <Home className="w-4 h-4 mr-2" />
-              Home
-            </Link>
-            <Link
-              href="/shop"
-              className="flex items-center justify-center px-4 py-3 font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 shadow-md"
-            >
-              <ShoppingBag className="w-4 h-4 mr-2" />
-              Continue Shopping
-            </Link>
+            <div className="flex justify-between items-center">
+              <span>Payment Method:</span>
+              <span className="font-medium text-[#2C3E50]">
+                {paymentMethod}
+              </span>
+            </div>
           </div>
         </motion.div>
-      </div>
+
+        {/* Bank Details */}
+        {paymentMethod.toLowerCase().includes("bank") && (
+          <motion.div
+            variants={itemVariants}
+            className="bg-[#FBF8F2] border border-yellow-200/80 rounded-lg p-6 mb-6 text-left"
+          >
+            <h3 className="font-serif font-medium text-lg text-[#A67B5B] mb-3">
+              Action Required: Bank Transfer
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Please transfer{" "}
+              <span className="font-semibold text-[#2C3E50]">Rs. {total}</span>{" "}
+              using your order number{" "}
+              <span className="font-semibold text-[#2C3E50]">
+                {orderNumber}
+              </span>{" "}
+              as the payment reference.
+            </p>
+            <div className="bg-white border rounded-md px-4 py-3 text-sm flex justify-between items-center">
+              <pre className="font-mono text-gray-700 whitespace-pre-wrap">
+                {bankDetails}
+              </pre>
+              <button
+                type="button"
+                onClick={async () => {
+                  await navigator.clipboard.writeText(bankDetails);
+                  toast.success("Bank details copied!");
+                }}
+                className="ml-4 p-2 text-gray-500 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                <Copy className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Delivery & Fabric Info */}
+        {/* Delivery & Return Info */}
+        <motion.div
+          variants={itemVariants}
+          className="bg-[#FBF8F2] border border-gray-200/50 rounded-lg p-6 mb-6 text-left"
+        >
+          <h3 className="font-serif font-medium text-lg text-[#A67B5B] mb-3">
+            Important Info
+          </h3>
+          <p className="text-sm text-gray-600 mb-2">
+            Deliveries typically take <strong>2-6 business days</strong>.
+            Deliveries do not occur on Sundays or Holidays.
+          </p>
+          <p className="text-sm text-gray-600 mb-2">
+            All parcels are handed over to the courier on the same day the order
+            is placed. Delivery timelines are managed by the courier.
+          </p>
+          <p className="text-sm text-gray-600 mb-2">
+            <strong>Fabrics:</strong> All fabrics are cut to individual orders,
+            so we cannot accept returns unless the fabric piece is defective
+            (within 7 days).
+          </p>
+          <p className="text-sm text-gray-600 mb-2">
+            <strong>Other items:</strong> Items other than fabrics are
+            exchangeable/returnable according to our{" "}
+            <Link href="/returns" className="underline text-blue-600">
+              Return & Refund Policy
+            </Link>
+            .
+          </p>
+          <p className="text-sm text-gray-600">
+            For full details, please read our{" "}
+            <Link href="/returns" className="underline text-blue-600">
+              Return & Refund Policy
+            </Link>
+            .
+          </p>
+        </motion.div>
+
+        
+
+        {/* Action Buttons */}
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6"
+        >
+          <Link
+            href="/"
+            className="flex items-center justify-center px-5 py-3 font-semibold text-[#2C3E50] bg-transparent border border-[#2C3E50]/30 rounded-full hover:bg-[#2C3E50]/5 transition-colors duration-300"
+          >
+            <Home className="w-4 h-4 mr-2" />
+            Back to Home
+          </Link>
+          <Link
+            href="/shop"
+            className="flex items-center justify-center px-5 py-3 font-semibold bg-[#2C3E50] text-white rounded-full hover:bg-[#46627f] transition-colors duration-300 shadow-sm"
+          >
+            <ShoppingBag className="w-4 h-4 mr-2" />
+            Continue Shopping
+          </Link>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

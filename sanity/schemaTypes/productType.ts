@@ -96,7 +96,7 @@ export const productType = defineType({
               title: "Stock Out",
               type: "number",
               initialValue: 0,
-              readOnly: true, // Should be managed by your order logic, not manually.
+              readOnly: false, // Should be managed by your order logic, not manually.
             }),
             defineField({
               name: "images",
@@ -136,9 +136,9 @@ export const productType = defineType({
 
     defineField({
       name: "discount",
-      title: "Discount Price (LKR)",
+      title: "Discount Percentage (%)",
       type: "number",
-      description: "Optional: If set, this will be the new price.",
+      description: "This is applied on the base price. E.g., enter 10 for 10% off.",
       validation: (Rule) => Rule.min(0),
     }),
 

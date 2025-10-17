@@ -49,13 +49,13 @@ const WhatIs = () => {
 
           <div className="mt-6 mx-10 flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
             <a
-              href="/our-story"
+              href="/about"
               className="px-6 py-3 bg-tech_primary text-white font-semibold rounded shadow hover:bg-tech_gold hover:text-primary transition-colors"
             >
               READ OUR STORY
             </a>
             <a
-              href="/how-to-care"
+              href="/care-guide"
               className="px-6 py-3 border border-tech_gold text-tech_primary font-semibold rounded shadow hover:bg-tech_gold hover:text-white transition-colors"
             >
               HOW TO CARE
