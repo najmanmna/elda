@@ -19,7 +19,7 @@ export interface ExpandedCategory extends Omit<BaseCategory, "parent"> {
 }
 
 const ALLCATEGORIES_QUERY = `
-  *[_type == "category"] | order(name asc){
+  *[_type == "category"] | order(_createdAt asc){
     ...,
     parent->{
       _id,
