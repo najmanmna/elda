@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const RadioGroup = React.forwardRef<
@@ -26,16 +27,21 @@ const RadioGroupItem = React.forwardRef<
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        "aspect-square h-6 w-6 rounded-full border border-primary shadow-sm focus:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+        "aspect-square h-5 w-5 rounded-full border border-gray-300 text-gray-700 ring-offset-white transition-colors",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-[#A67B5B]/80 focus-visible:ring-offset-2",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        "data-[state=checked]:border-[#A67B5B]",
         className
       )}
       {...props}
     >
-      {/* dot indicator */}
-      <RadioGroupPrimitive.Indicator
-        className="flex items-center justify-center"
-      >
-        <span className="h-3 w-3 rounded-full bg-tech_orange" />
+      <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+          className="h-2.5 w-2.5 rounded-full bg-[#A67B5B]"
+        />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   );

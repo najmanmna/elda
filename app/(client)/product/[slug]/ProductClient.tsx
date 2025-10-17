@@ -176,7 +176,6 @@ export default function ProductClient({ product }: { product: any }) {
               </div>
             )}
 
-       
             {/* Quantity Selector with Label and Available Stock */}
             <div className="flex flex-col gap-1 mt-4">
               {/* Label */}
@@ -190,11 +189,13 @@ export default function ProductClient({ product }: { product: any }) {
               <div className="flex items-center gap-3">
                 <LocalQuantitySelector
                   stockAvailable={selectedVariant?.availableStock}
+                  isFabric={product.category?.name?.toLowerCase() === "fabrics"}
                   onChange={(q) => setQuantity(q)}
                 />
+
                 <p className="text-sm text-gray-500">
                   {product.category?.name?.toLowerCase() === "fabrics"
-                    ? `Available: ${availableStock}.0 m`
+                    ? `Available: ${availableStock} m`
                     : `Available: ${availableStock}`}
                 </p>
               </div>

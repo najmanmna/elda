@@ -19,10 +19,10 @@ const quickLinks = [
 ];
 
 const shopLinks = [
-  { href: "/shop/fabrics", title: "Fabrics" },
-  { href: "/shop/clothing", title:"Clothing" },
-  { href: "/shop/home-bedding", title: "Home & Bedding" },
-  { href: "/shop/accessories", title: "Accessories" },
+  { href: "/category/fabrics", title: "Fabrics" },
+  { href: "/category/clothing", title:"Clothing" },
+  { href: "/category/home-and-bedding", title: "Home & Bedding" },
+  { href: "/category/accessories", title: "Accessories" },
 ];
 
 const Footer = () => {
