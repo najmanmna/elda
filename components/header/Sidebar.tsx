@@ -88,6 +88,20 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="flex flex-col gap-3 pl-4 mt-3 border-l-2 border-gray-200 overflow-hidden"
                           >
+                            {/* 🔹 Add “All [CategoryName]” link */}
+                            <Link
+                              onClick={onClose}
+                              href={`/category/${mainCat.slug?.current}`}
+                              className={`hover:text-tech_primary transition text-gray-700 font-medium text-base ${
+                                pathname ===
+                                  `/category/${mainCat.slug?.current}` &&
+                                "text-tech_gold font-semibold"
+                              }`}
+                            >
+                              All {mainCat.name}
+                            </Link>
+
+                            {/* 🔹 Render subcategories if any */}
                             {subcategories?.length ? (
                               subcategories.map((sub) => (
                                 <Link
