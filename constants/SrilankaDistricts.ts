@@ -59,7 +59,7 @@ export const DISTRICTS: Record<string, string[]> = {
   // Central Province
   Kandy: [
     "Kandy", "Peradeniya", "Katugastota", "Gampola", "Nawalapitiya", "Mawanella",
-    "Nawalapitiya", "Kadugannawa", "Hatton", "Kundasale"
+     "Kadugannawa", "Hatton", "Kundasale"
   ],
   Matale: [
     "Matale", "Dambulla", "Sigiriya", "Habarana", "Galewela", "Ukuwela", "Rattota",

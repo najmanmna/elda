@@ -5,44 +5,62 @@ export const orderItemType = defineType({
   title: "Order Item",
   type: "object",
   fields: [
+    // 🔹 Reference to the product
     defineField({
       name: "product",
       title: "Product",
       type: "reference",
       to: [{ type: "product" }],
+      validation: (Rule) => Rule.required(),
     }),
-  defineField({
-  name: "variant",
-  title: "Variant",
-  type: "object",
-  fields: [
-    { name: "color", title: "Color", type: "string" },
-    { name: "variantKey", title: "Variant Key", type: "string" }, // 👈 renamed
-  ],
-}),
 
+    // 🔹 Variant info snapshot
+    defineField({
+      name: "variant",
+      title: "Variant Details",
+      type: "object",
+      fields: [
+        defineField({
+          name: "variantName",
+          title: "Variant Name",
+          type: "string",
+        }),
+        defineField({
+          name: "variantKey",
+          title: "Variant Key",
+          type: "string",
+          description: "The _key of the variant in the product document",
+        }),
+      ],
+    }),
 
+    // 🔹 Quantity and pricing
     defineField({
       name: "quantity",
       title: "Quantity",
       type: "number",
-      validation: (Rule) => Rule.min(1),
+      validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: "price",
-      title: "Unit Price",
+      title: "Unit Price (Snapshot)",
       type: "number",
+      validation: (Rule) => Rule.required().min(0),
     }),
+
+    // 🔹 Snapshot fields (in case product changes later)
     defineField({
       name: "productName",
-      title: "Product Name (snapshot)",
+      title: "Product Name (Snapshot)",
       type: "string",
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "productImage",
-      title: "Product Image (snapshot)",
+      title: "Product Image (Snapshot)",
       type: "image",
-      options: { hotspot: true }, // ✅ make it optional + supports crop
+      options: { hotspot: true },
+      description: "First image of the variant or product at time of order",
     }),
   ],
 
@@ -54,26 +72,35 @@ export const orderItemType = defineType({
       refVariants: "product.variants",
       quantity: "quantity",
       price: "price",
-      variant: "variant",
+      variantName: "variant.variantName",
+      variantKey: "variant.variantKey",
     },
-prepare({ snapName, snapImage, refName, refVariants, quantity, price, variant }) {
-  const name = snapName || refName || "Unknown Product";
+    prepare({
+      snapName,
+      snapImage,
+      refName,
+      refVariants,
+      quantity,
+      price,
+      variantName,
+      variantKey,
+    }) {
+      const name = snapName || refName || "Unnamed Product";
 
-  let image = snapImage;
+      // Fallback: use variant image if snapshot missing
+      let image = snapImage;
+      if (!image && refVariants && variantKey) {
+        const matched = refVariants.find((v) => v._key === variantKey);
+        image = matched?.images?.[0];
+      }
 
-  if (!image && refVariants && variant?.variantKey) {
-    const matched = refVariants.find((v: any) => v._key === variant.variantKey);
-    image = matched?.images?.[0];
-  }
+      const total = (price || 0) * (quantity || 0);
 
-  const total = (price || 0) * (quantity || 0);
-
-  return {
-    title: `${quantity || 0} × ${name}`,
-    subtitle: `Rs. ${total}${variant?.color ? ` – ${variant.color}` : ""}`,
-    media: image || undefined,
-  };
-},
-
+      return {
+        title: `${quantity || 0} × ${name}`,
+        subtitle: `Rs. ${total}${variantName ? ` — ${variantName}` : ""}`,
+        media: image,
+      };
+    },
   },
 });

@@ -216,7 +216,7 @@ const CartPage = () => {
                 <div className="flex justify-between text-gray-600">
                   <span>Discount</span>
                   <span className="text-green-600">
-                    - <PriceFormatter amount={subtotal - total} />
+                     <PriceFormatter amount={subtotal - total} />
                   </span>
                 </div>
                 <Separator />
@@ -227,7 +227,7 @@ const CartPage = () => {
                 <Button
                   onClick={handleProceedToCheckout}
                   disabled={loading}
-                  className="w-full font-semibold tracking-wide mt-4"
+                  className="w-full bg-tech_primary font-semibold tracking-wide mt-4"
                   size="lg"
                 >
                   {loading ? "Processing..." : (

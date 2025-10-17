@@ -224,7 +224,7 @@ export default function CheckoutPage() {
           };
         }),
       };
-
+console.log("🚀 Checkout payload:", payload);
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
