@@ -19,6 +19,7 @@ const VisitStudio = () => {
 
   return (
     <section
+    id="studio"
       className="relative bg-white py-20 "
       style={{
         backgroundImage: `url(${bgPattern.src})`,

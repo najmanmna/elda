@@ -46,6 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
             transition={{ type: "tween", duration: 0.4, ease: "easeOut" }}
             className="fixed top-0 left-0 sm:w-full max-w-sm bg-[#FDFBF6] z-50 h-screen p-6 shadow-2xl flex flex-col gap-8"
           >
+            {/* Header */}
             <div className="flex items-center justify-between">
               <h2 className="font-serif text-2xl font-medium text-[#2C3E50]">
                 Menu
@@ -58,6 +59,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
               </button>
             </div>
 
+            {/* Category List */}
             <div className="flex-grow overflow-y-auto pr-2">
               {mainCategories?.length ? (
                 mainCategories.map((mainCat) => {
@@ -79,6 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
                         />
                       </div>
 
+                      {/* Dropdown with All + Subcategories */}
                       <AnimatePresence>
                         {isActive && (
                           <motion.div
@@ -88,7 +91,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="flex flex-col gap-3 pl-4 mt-3 border-l-2 border-gray-200 overflow-hidden"
                           >
-                            {/* 🔹 Add “All [CategoryName]” link */}
                             <Link
                               onClick={onClose}
                               href={`/category/${mainCat.slug?.current}`}
@@ -101,7 +103,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
                               All {mainCat.name}
                             </Link>
 
-                            {/* 🔹 Render subcategories if any */}
                             {subcategories?.length ? (
                               subcategories.map((sub) => (
                                 <Link
@@ -133,20 +134,38 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, categories }) => {
               )}
             </div>
 
-            <div className="border-t border-gray-200 ">
-              <ul className="space-y-3">
+            {/* Footer Links */}
+            <div className="border-t border-gray-200 pt-4 mt-4 space-y-3">
+            
+
+              {/* Store Locator */}
+              <Link
+                href="/#studio"
+                onClick={onClose}
+                className="block text-gray-600 hover:text-[#2C3E50] text-sm font-normal transition-colors"
+              >
+                Store Locator
+              </Link>
+
+              {/* Care Guide */}
+              <Link
+                href="/care-guide"
+                onClick={onClose}
+                className="block text-gray-600 hover:text-[#2C3E50] text-sm font-normal transition-colors"
+              >
+                Care Guide
+              </Link>
+
                 {quickLinksDataMenu?.map((item) => (
-                  <li key={item?.title}>
-                    <Link
-                      href={item?.href}
-                      onClick={onClose}
-                      className="text-gray-600 hover:text-[#2C3E50] text-sm font-normal transition-colors"
-                    >
-                      {item?.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+                <Link
+                  key={item?.title}
+                  href={item?.href}
+                  onClick={onClose}
+                  className="block text-gray-600 hover:text-[#2C3E50] text-sm font-normal transition-colors"
+                >
+                  {item?.title}
+                </Link>
+              ))}
             </div>
           </motion.div>
         </motion.div>
